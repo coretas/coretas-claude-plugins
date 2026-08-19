@@ -1,0 +1,17 @@
+name: Feature request
+description: Suggest a signal, check, or improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What tracking problem goes undetected today?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How would a page show this problem?
+      description: What would be observable in the rendered page — a request, a dataLayer push, an absence
+    validations:
+      required: true

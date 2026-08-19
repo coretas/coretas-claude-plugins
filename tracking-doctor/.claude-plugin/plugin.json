@@ -1,0 +1,14 @@
+{
+  "name": "tracking-doctor",
+  "description": "Audit what tracking actually fires on a web page — GA4, Meta Pixel, conversion linker, consent mode. No account, no OAuth.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Coretas",
+    "email": "info@coretas.ai",
+    "url": "https://coretas.ai"
+  },
+  "homepage": "https://github.com/coretas/coretas-claude-plugins",
+  "repository": "https://github.com/coretas/coretas-claude-plugins",
+  "license": "MIT",
+  "keywords": ["analytics", "tracking", "gtm", "ga4", "consent-mode", "audit"]
+}

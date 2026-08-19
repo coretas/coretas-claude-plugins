@@ -1,0 +1,24 @@
+{
+  "name": "coretas",
+  "owner": {
+    "name": "Coretas",
+    "email": "info@coretas.ai",
+    "url": "https://coretas.ai"
+  },
+  "metadata": {
+    "description": "Credential-free diagnostics for advertising measurement.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "tracking-doctor",
+      "source": "./tracking-doctor",
+      "description": "Audit what tracking actually fires on a web page — GA4, Meta Pixel, conversion linker, consent mode. No account, no OAuth.",
+      "author": { "name": "Coretas", "email": "info@coretas.ai" },
+      "homepage": "https://github.com/coretas/coretas-claude-plugins",
+      "license": "MIT",
+      "keywords": ["analytics", "tracking", "gtm", "ga4", "consent-mode", "audit"],
+      "category": "monitoring"
+    }
+  ]
+}
