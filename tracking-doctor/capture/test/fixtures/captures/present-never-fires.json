@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "browser": { "channel": "chrome", "version": "151.0.0.0" },
+  "target": { "url": "https://never-fires.example.test/", "finalUrl": "https://never-fires.example.test/" },
+  "options": {},
+  "run": { "durationMs": 4000, "timedOut": false, "settled": true },
+  "consent": { "action": "accept", "matched": null, "attempted": true, "tMs": 500 },
+  "navigations": [],
+  "requests": [
+    {
+      "tMs": 400,
+      "phase": "pre-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "www.googletagmanager.com",
+      "path": "/gtag/js",
+      "url": "https://www.googletagmanager.com/gtag/js?id=G-NEVER123",
+      "params": { "id": "G-NEVER123" },
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://never-fires.example.test/"
+    },
+    {
+      "tMs": 410,
+      "phase": "pre-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "www.googletagmanager.com",
+      "path": "/gtag/js",
+      "url": "https://www.googletagmanager.com/gtag/js?id=AW-123456789",
+      "params": { "id": "AW-123456789" },
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://never-fires.example.test/"
+    },
+    {
+      "tMs": 420,
+      "phase": "pre-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "connect.facebook.net",
+      "path": "/en_US/fbevents.js",
+      "url": "https://connect.facebook.net/en_US/fbevents.js",
+      "params": {},
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://never-fires.example.test/"
+    }
+  ],
+  "dataLayer": [
+    {
+      "source": "dataLayer",
+      "index": 0,
+      "phase": "pre-consent",
+      "route": null,
+      "tMs": 410,
+      "value": { "__type": "arguments", "values": ["config", "G-NEVER123"] }
+    },
+    {
+      "source": "dataLayer",
+      "index": 1,
+      "phase": "pre-consent",
+      "route": null,
+      "tMs": 420,
+      "value": { "__type": "arguments", "values": ["config", "AW-123456789"] }
+    }
+  ],
+  "cookies": [],
+  "errors": []
+}

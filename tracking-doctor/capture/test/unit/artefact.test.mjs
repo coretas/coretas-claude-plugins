@@ -88,6 +88,19 @@ test('normalise is pure: the same artefact yields byte-identical output', async 
   assert.equal(once, twice)
 })
 
+test('normalise defaults cookies to an empty array when the field is absent', async () => {
+  const raw = JSON.parse(await readFixture())
+  delete raw.cookies
+  const capture = normalise(raw)
+  assert.deepEqual(capture.cookies, [])
+})
+
+test('normalise passes cookies through unchanged', async () => {
+  const capture = normalise(parseArtefact(await readFixture()))
+  assert.equal(capture.cookies.length, 2)
+  assert.ok(capture.cookies.some((cookie) => cookie.name === '_gcl_au'))
+})
+
 test('normalise splits a request URL into host, path and params', async () => {
   const capture = normalise(parseArtefact(await readFixture()))
   const gtm = capture.requests.find((request) => request.host === 'www.googletagmanager.com')

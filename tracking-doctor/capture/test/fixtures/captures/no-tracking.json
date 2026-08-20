@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "browser": { "channel": "chrome", "version": "151.0.0.0" },
+  "target": { "url": "https://no-tracking.example.test/", "finalUrl": "https://no-tracking.example.test/" },
+  "options": {},
+  "run": { "durationMs": 1200, "timedOut": false, "settled": true },
+  "consent": { "action": "none", "matched": null, "attempted": false, "tMs": null },
+  "navigations": [],
+  "requests": [
+    {
+      "tMs": 50,
+      "phase": "no-consent-step",
+      "route": null,
+      "method": "GET",
+      "resourceType": "stylesheet",
+      "host": "no-tracking.example.test",
+      "path": "/styles.css",
+      "url": "https://no-tracking.example.test/styles.css",
+      "params": {},
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://no-tracking.example.test/"
+    },
+    {
+      "tMs": 60,
+      "phase": "no-consent-step",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "no-tracking.example.test",
+      "path": "/app.js",
+      "url": "https://no-tracking.example.test/app.js",
+      "params": {},
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://no-tracking.example.test/"
+    },
+    {
+      "tMs": 70,
+      "phase": "no-consent-step",
+      "route": null,
+      "method": "GET",
+      "resourceType": "image",
+      "host": "no-tracking.example.test",
+      "path": "/logo.png",
+      "url": "https://no-tracking.example.test/logo.png",
+      "params": {},
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://no-tracking.example.test/"
+    }
+  ],
+  "dataLayer": [],
+  "cookies": [],
+  "errors": []
+}

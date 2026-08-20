@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "browser": { "channel": "chrome", "version": "151.0.0.0" },
+  "target": { "url": "https://healthy.example.test/", "finalUrl": "https://healthy.example.test/" },
+  "options": {},
+  "run": { "durationMs": 4000, "timedOut": false, "settled": true },
+  "consent": { "action": "accept", "matched": "selector=#accept-cookies", "attempted": true, "tMs": 1900 },
+  "navigations": [],
+  "requests": [
+    {
+      "tMs": 400,
+      "phase": "pre-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "www.googletagmanager.com",
+      "path": "/gtag/js",
+      "url": "https://www.googletagmanager.com/gtag/js?id=G-HEALTHY1",
+      "params": { "id": "G-HEALTHY1" },
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    },
+    {
+      "tMs": 410,
+      "phase": "pre-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "www.googletagmanager.com",
+      "path": "/gtag/js",
+      "url": "https://www.googletagmanager.com/gtag/js?id=AW-123456789",
+      "params": { "id": "AW-123456789" },
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    },
+    {
+      "tMs": 420,
+      "phase": "pre-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "connect.facebook.net",
+      "path": "/en_US/fbevents.js",
+      "url": "https://connect.facebook.net/en_US/fbevents.js",
+      "params": {},
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    },
+    {
+      "tMs": 2000,
+      "phase": "post-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "image",
+      "host": "www.google-analytics.com",
+      "path": "/g/collect",
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-HEALTHY1&en=page_view&gcs=G111",
+      "params": { "v": "2", "tid": "G-HEALTHY1", "en": "page_view", "gcs": "G111" },
+      "body": null,
+      "status": 204,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    },
+    {
+      "tMs": 2100,
+      "phase": "post-consent",
+      "route": null,
+      "method": "POST",
+      "resourceType": "fetch",
+      "host": "www.google-analytics.com",
+      "path": "/g/collect",
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-HEALTHY1",
+      "params": { "v": "2", "tid": "G-HEALTHY1" },
+      "body": { "kind": "query-rows", "rows": [{ "en": "sign_up", "epn.method": "email" }] },
+      "status": 204,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    },
+    {
+      "tMs": 2200,
+      "phase": "post-consent",
+      "route": null,
+      "method": "POST",
+      "resourceType": "fetch",
+      "host": "www.facebook.com",
+      "path": "/tr",
+      "url": "https://www.facebook.com/tr?id=1112223334445&ev=PageView",
+      "params": { "id": "1112223334445", "ev": "PageView" },
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    },
+    {
+      "tMs": 2300,
+      "phase": "post-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "image",
+      "host": "www.googleadservices.com",
+      "path": "/pagead/conversion/123456789/",
+      "url": "https://www.googleadservices.com/pagead/conversion/123456789/?label=abc123&gcs=G111",
+      "params": { "label": "abc123", "gcs": "G111" },
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    }
+  ],
+  "dataLayer": [
+    {
+      "source": "dataLayer",
+      "index": 0,
+      "phase": "pre-consent",
+      "route": null,
+      "tMs": 100,
+      "value": { "__type": "arguments", "values": ["consent", "default", { "ad_storage": "denied", "analytics_storage": "denied" }] }
+    },
+    {
+      "source": "dataLayer",
+      "index": 1,
+      "phase": "pre-consent",
+      "route": null,
+      "tMs": 410,
+      "value": { "__type": "arguments", "values": ["config", "G-HEALTHY1"] }
+    },
+    {
+      "source": "dataLayer",
+      "index": 2,
+      "phase": "pre-consent",
+      "route": null,
+      "tMs": 420,
+      "value": { "__type": "arguments", "values": ["config", "AW-123456789"] }
+    },
+    {
+      "source": "dataLayer",
+      "index": 3,
+      "phase": "post-consent",
+      "route": null,
+      "tMs": 1900,
+      "value": { "__type": "arguments", "values": ["consent", "update", { "ad_storage": "granted", "analytics_storage": "granted" }] }
+    }
+  ],
+  "cookies": [
+    { "name": "_gcl_au", "domain": ".healthy.example.test", "path": "/", "secure": true, "httpOnly": false, "sameSite": "Lax", "session": false }
+  ],
+  "errors": []
+}

@@ -42,6 +42,15 @@ the internet. `canonicalise()` exists to strip that port, timings and browser
 identity out of a capture so a golden fixture can be diffed against a live
 render.
 
+Detection tests (`lib/detect/**`) are pure — hand-built captures, no browser — and must live flat
+in `test/unit/`, since `npm run test:pure` globs `test/unit/*.test.mjs`; a nested file is silently
+skipped and the suite still reports green.
+
+Anything a manual run writes goes under `/tmp/tracking-doctor/`. Never point `--out` at the working
+directory: this package sits inside the repository, and a scratch capture dropped beside the source
+is one `git add -A` away from being committed. Tests that need a file use `mkdtemp()` and clean up
+after themselves.
+
 ## Testing an install locally
 
 ```bash

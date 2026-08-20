@@ -1,14 +1,16 @@
 # tracking-doctor-capture
 
 The observation engine behind the `tracking-doctor` plugin. It renders a URL in a real browser and
-records what tracking actually fires: outbound requests with their params and POST bodies, plus the
-full `dataLayer` push sequence.
+records what tracking actually fires: outbound requests with their params and POST bodies, the full
+`dataLayer` push sequence, and the cookies left behind.
 
-It only **observes**. It does not judge — turning a capture into findings is a separate step.
+Capture and detection are two separate steps in this one package: capture **observes** the
+rendered page, and `detect` turns that observation into findings expressed in the backend's own
+vocabulary, so plugin output and a Coretas GTM audit can be compared string-for-string.
 
-> **Status: partial.** This package is the capture layer only (CRM-1581). Detection rules, the
-> report, and the golden fixture suite land in CRM-1582/1583/1584. Sections marked _later_ below
-> are placeholders to update as those ship.
+> **Status: partial.** Capture (CRM-1581) and detection rules (CRM-1582) are done. The
+> human-readable report and golden fixtures against live pages land in CRM-1583/1584. Sections
+> marked _later_ below are placeholders to update as those ship.
 
 ## Install
 
@@ -29,9 +31,15 @@ Chromium; if neither exists, run `npx playwright-core install chromium`.
 node capture.mjs capture https://example.com
 
 # keep the raw artefact, then re-derive findings offline, as often as you like
-node capture.mjs capture https://example.com --raw --out artefact.json
-node capture.mjs replay artefact.json
+node capture.mjs capture https://example.com --raw --out /tmp/tracking-doctor/artefact.json
+node capture.mjs replay /tmp/tracking-doctor/artefact.json
+node capture.mjs detect /tmp/tracking-doctor/artefact.json
 ```
+
+Scratch output belongs under `/tmp/tracking-doctor/`, never in the working directory — this package
+lives inside a git repository and a stray `artefact.json` next to the source is one `git add -A`
+away from being committed. `--out` creates the directory for you, so the path above works as
+written.
 
 | Flag | Purpose |
 | --- | --- |
@@ -39,7 +47,7 @@ node capture.mjs replay artefact.json
 | `--consent <accept\|none>` | dismiss cookie banners, or leave them alone |
 | `--route <path>` | visit an SPA route after load; repeatable |
 | `--timeout <ms>` / `--settle <ms>` | overall budget / network quiet period |
-| `--raw` | emit the artefact rather than the normalised capture |
+| `--raw` | emit the artefact rather than the normalised capture (`capture` only) |
 | `--canonical` | strip timings, browser identity and origins (for goldens) |
 | `--headed` | show the browser, for debugging |
 
@@ -51,8 +59,44 @@ Three shapes, same data:
 
 - **artefact** (`--raw`) — the raw record of one render. Commit this; it replays offline.
 - **normalised** (default) — requests split into host/path/params, POST bodies unpacked, GET and
-  POST hits given one shape. This is what detection reads.
+  POST hits given one shape, plus the cookies left behind. This is what detection reads.
 - **canonical** (`--canonical`) — normalised minus everything that varies between two runs.
+
+The artefact and normalised capture both carry a `cookies` array: `name`, `domain`, `path`,
+`secure`, `httpOnly`, `sameSite`, `session`. Values are dropped on purpose — this tool runs against
+strangers' sites, and cookie values carry identifiers detection has no need to see. Existence is
+all `conversion_linker` needs.
+
+## Findings
+
+`detect` turns a capture into six findings, one per signal, in the vocabulary the Coretas backend
+uses for a GTM container audit (`app/services/gtm/enums.py`) — so plugin output and a backend audit
+can be compared string-for-string.
+
+```bash
+node capture.mjs detect /tmp/tracking-doctor/artefact.json
+node capture.mjs detect /tmp/tracking-doctor/artefact.json --out /tmp/tracking-doctor/findings.json
+```
+
+```json
+{
+  "schemaVersion": 1,
+  "target": { "url": "…", "finalUrl": "…" },
+  "findings": [
+    { "signal": "ga4_config", "status": "ok", "detail": "…", "tag_names": [], "observed_values": {} }
+  ]
+}
+```
+
+The six signals, always present and always in this order: `ga4_config`, `meta_pixel`,
+`conversion_linker`, `google_ads_conversion`, `ga4_event_coverage`, `consent_mode`. Each finding's
+`status` is one of `ok`, `missing`, `mismatched`, `not_firing` — `paused` is part of the shared
+vocabulary but describes a container-config state a rendered page cannot show, so this plugin never
+emits it. `tag_names` is always `[]`: the plugin observes the page, not the tag manager, so it has
+no tag names to report; the field exists for comparability with the backend's output.
+
+These strings are the backend's own names, not labels this plugin invented — renaming one breaks
+the string-for-string comparison that is the reason this JSON exists.
 
 ## Consent phases
 
