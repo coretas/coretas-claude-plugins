@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spa</title>
+</head>
+<body>
+<h1>spa</h1>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function view() {
+    dataLayer.push({ event: 'page_view', page_path: location.pathname });
+    new Image().src = '/collect/spa?p=' + encodeURIComponent(location.pathname);
+  }
+  // A router that reacts to history changes, like every client-side router does.
+  window.addEventListener('popstate', view);
+  view();
+</script>
+</body>
+</html>

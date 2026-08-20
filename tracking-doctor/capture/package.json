@@ -1,0 +1,19 @@
+{
+  "name": "tracking-doctor-capture",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Headless render harness: records what tracking actually fires on a page.",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "bin": { "tracking-doctor-capture": "./capture.mjs" },
+  "scripts": {
+    "test": "node --test test/unit/*.test.mjs test/browser/*.test.mjs",
+    "test:pure": "node --test test/unit/*.test.mjs",
+    "capture": "node capture.mjs capture",
+    "replay": "node capture.mjs replay"
+  },
+  "dependencies": {
+    "playwright-core": "^1.62.1"
+  }
+}

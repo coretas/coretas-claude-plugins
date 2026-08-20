@@ -21,6 +21,27 @@ claude plugin validate ./tracking-doctor --strict
 `--strict` fails on unrecognised fields and missing metadata that the runtime tolerates. CI runs
 the same two commands, so a strict failure locally is a red build.
 
+## Testing the capture harness
+
+`tracking-doctor/capture` is a Node package with its own suite:
+
+```bash
+cd tracking-doctor/capture
+npm ci
+npm run test:pure   # pure units — no browser needed
+npm test            # adds the browser-backed suite
+```
+
+The browser-backed tests skip themselves when no Chromium-based browser is
+available, so `npm test` is green on a machine without one. CI installs Chromium
+so they actually run — check the job output, not just the exit code, if you are
+relying on them locally.
+
+Fixtures are served from `127.0.0.1` on an ephemeral port; the tests never reach
+the internet. `canonicalise()` exists to strip that port, timings and browser
+identity out of a capture so a golden fixture can be diffed against a live
+render.
+
 ## Testing an install locally
 
 ```bash
