@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>consent gated</title>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  dataLayer.push({ event: 'consent_default', analytics_storage: 'denied' });
+</script>
+</head>
+<body>
+<h1>consent gated</h1>
+<div id="cmp">
+  <p>We use cookies.</p>
+  <button id="onetrust-accept-btn-handler">Accept All</button>
+</div>
+<script>
+  // Fires regardless of consent — the pre-consent baseline.
+  new Image().src = '/collect/pre?ping=1';
+
+  document.getElementById('onetrust-accept-btn-handler').addEventListener('click', function () {
+    document.getElementById('cmp').remove();
+    // Gated on consent: this is the tag that only fires once accepted.
+    new Image().src = '/collect/g?v=2&tid=G-CONSENT1&en=page_view';
+    dataLayer.push({ event: 'consent_granted', analytics_storage: 'granted' });
+  });
+</script>
+</body>
+</html>
