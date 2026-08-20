@@ -97,6 +97,10 @@
       "failure": "net::ERR_BLOCKED_BY_CLIENT"
     }
   ],
+  "cookies": [
+    { "name": "_gcl_au", "domain": ".example.test", "path": "/", "secure": true, "httpOnly": false, "sameSite": "Lax", "session": false },
+    { "name": "session_id", "domain": "example.test", "path": "/", "secure": true, "httpOnly": true, "sameSite": "Strict", "session": true }
+  ],
   "dataLayer": [
     {
       "source": "dataLayer",

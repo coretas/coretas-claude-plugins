@@ -1,21 +1,25 @@
 #!/usr/bin/env node
-import { readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { dirname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import {
   ArtefactError,
+  SCHEMA_VERSION,
   canonicalise,
   normalise,
   parseArtefact,
   stableStringify,
 } from './lib/artefact.mjs'
 import { NoBrowserError } from './lib/browser.mjs'
+import { DetectionError, detect } from './lib/detect/index.mjs'
 import { DEFAULTS, capture } from './lib/run.mjs'
 
 const USAGE = `tracking-doctor-capture
 
   capture <url> [options]     render a page and record what tracking fires
   replay  <artefact.json>     re-derive the normalised capture, offline
+  detect  <artefact-or-capture.json>   turn a capture into signal findings
 
 Options
   --out <file>                write output here instead of stdout
@@ -49,6 +53,7 @@ async function main(argv) {
 
   if (command === 'capture') return runCapture(args)
   if (command === 'replay') return runReplay(args)
+  if (command === 'detect') return runDetect(args)
 
   process.stderr.write(`Unknown command "${command}"\n\n${USAGE}`)
   return EXIT.usage
@@ -111,15 +116,71 @@ async function runReplay(args) {
   }
 }
 
+async function runDetect(args) {
+  const path = args.positional[0]
+  if (!path) {
+    process.stderr.write(`detect requires an artefact or capture path\n\n${USAGE}`)
+    return EXIT.usage
+  }
+  try {
+    const input = parseDetectInput(await readFile(path, 'utf8'))
+    await emit(args.out, detect(input))
+    return EXIT.ok
+  } catch (error) {
+    if (error instanceof ArtefactError || error instanceof DetectionError) {
+      process.stderr.write(`${error.message}\n`)
+      return EXIT.error
+    }
+    throw error
+  }
+}
+
+/**
+ * `parseArtefact` only accepts artefacts. A normalised capture carries no
+ * `run.startedAt`, so it gets its own lighter validation here, same message
+ * style as `parseArtefact`.
+ */
+function parseDetectInput(text) {
+  let raw
+  try {
+    raw = JSON.parse(text)
+  } catch (err) {
+    throw new ArtefactError(`Artefact is not valid JSON: ${err.message}`)
+  }
+  if (raw?.run?.startedAt !== undefined) return parseArtefact(text)
+
+  if (raw?.schemaVersion !== SCHEMA_VERSION) {
+    throw new ArtefactError(
+      `Unsupported artefact schemaVersion ${raw?.schemaVersion ?? '(missing)'}; expected ${SCHEMA_VERSION}`
+    )
+  }
+  for (const field of ['requests', 'dataLayer']) {
+    if (raw[field] === undefined) throw new ArtefactError(`Artefact is missing required field "${field}"`)
+  }
+  return raw
+}
+
 function shape(artefact, { raw, canonical }) {
   const shaped = raw ? artefact : normalise(artefact)
   return canonical ? canonicalise(shaped) : shaped
 }
 
-async function emit(out, value) {
+/**
+ * Writing a capture is the one thing this CLI does to a filesystem, so it
+ * creates the directory it was pointed at rather than failing on a path that
+ * does not exist yet. That keeps a scratch location like
+ * /tmp/tracking-doctor/run.json usable without a preceding mkdir, which is why
+ * every example in the README uses one instead of the working directory.
+ */
+export async function emit(out, value) {
   const text = `${stableStringify(value)}\n`
-  if (out) await writeFile(out, text, 'utf8')
-  else process.stdout.write(text)
+  if (!out) {
+    process.stdout.write(text)
+    return
+  }
+  const parent = dirname(out)
+  if (parent && parent !== '.') await mkdir(parent, { recursive: true })
+  await writeFile(out, text, 'utf8')
 }
 
 function describe(errors) {

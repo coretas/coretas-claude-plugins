@@ -50,6 +50,7 @@ export async function capture(options) {
   let finalUrl = null
 
   let userAgent = null
+  let cookies = []
   try {
     userAgent = await resolveUserAgent(browser)
     context = await browser.newContext({ viewport: opts.viewport, userAgent: userAgent ?? undefined })
@@ -162,6 +163,20 @@ export async function capture(options) {
 
       finalUrl = page.url()
     }
+
+    try {
+      cookies = (await context.cookies()).map((cookie) => ({
+        name: cookie.name,
+        domain: cookie.domain,
+        path: cookie.path,
+        secure: cookie.secure,
+        httpOnly: cookie.httpOnly,
+        sameSite: cookie.sameSite,
+        session: cookie.expires === -1,
+      }))
+    } catch (error) {
+      errors.push({ tMs: elapsed(), kind: 'cookies-failed', message: firstLine(error) })
+    }
   } finally {
     settle?.dispose()
     await context?.close().catch(() => {})
@@ -193,6 +208,7 @@ export async function capture(options) {
     navigations,
     requests,
     dataLayer,
+    cookies,
     errors,
   }
 }

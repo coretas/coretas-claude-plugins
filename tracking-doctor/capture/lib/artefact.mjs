@@ -78,6 +78,7 @@ export function normalise(artefact) {
       tMs: entry.tMs ?? null,
       value: entry.value ?? null,
     })),
+    cookies: artefact.cookies ?? [],
     errors: artefact.errors ?? [],
   }
 }
