@@ -1,0 +1,93 @@
+{
+  "findings": [
+    {
+      "detail": "GA4 measurement ID G-PAUSED1 is configured on the page but no measurement hit was sent.",
+      "observed_values": {
+        "failed_hit_count": 0,
+        "hit_count": 0,
+        "loader_urls": [
+          "https://www.googletagmanager.com/gtag/js?id=AW-123456789",
+          "https://www.googletagmanager.com/gtag/js?id=G-PAUSED1"
+        ],
+        "measurement_ids_declared": [
+          "G-PAUSED1"
+        ],
+        "measurement_ids_observed": []
+      },
+      "signal": "ga4_config",
+      "status": "not_firing",
+      "tag_names": []
+    },
+    {
+      "detail": "The Meta Pixel library loaded but pixel (none declared) sent no events.",
+      "observed_values": {
+        "events": [],
+        "failed_hit_count": 0,
+        "hit_count": 0,
+        "loader_seen": true,
+        "pixel_ids": []
+      },
+      "signal": "meta_pixel",
+      "status": "not_firing",
+      "tag_names": []
+    },
+    {
+      "detail": "Google tagging is present but no conversion linker evidence was observed; ad click IDs will not be attributed.",
+      "observed_values": {
+        "google_tagging": true,
+        "linker_cookies": [],
+        "linker_params": []
+      },
+      "signal": "conversion_linker",
+      "status": "not_firing",
+      "tag_names": []
+    },
+    {
+      "detail": "Google Ads ID AW-123456789 is configured but no conversion or remarketing hit was sent.",
+      "observed_values": {
+        "conversion_ids_declared": [
+          "AW-123456789"
+        ],
+        "conversion_ids_observed": [],
+        "failed_hit_count": 0,
+        "hit_count": 0,
+        "labels": [],
+        "remarketing_only": false
+      },
+      "signal": "google_ads_conversion",
+      "status": "not_firing",
+      "tag_names": []
+    },
+    {
+      "detail": "No GA4 events observed on this page.",
+      "observed_values": {
+        "automatic_events": [],
+        "custom_events": [],
+        "duplicates": [],
+        "events": []
+      },
+      "signal": "ga4_event_coverage",
+      "status": "missing",
+      "tag_names": []
+    },
+    {
+      "detail": "No Google consent mode signals observed on this page.",
+      "observed_values": {
+        "commands": [],
+        "gcd_values": [],
+        "gcs_values": [],
+        "phases_seen": [
+          "pre-consent"
+        ]
+      },
+      "signal": "consent_mode",
+      "status": "missing",
+      "tag_names": []
+    }
+  ],
+  "schemaVersion": 1,
+  "target": {
+    "finalUrl": "http://fixture.test/golden/paused-tag.html",
+    "url": "http://fixture.test/golden/paused-tag.html"
+  }
+}

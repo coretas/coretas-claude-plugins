@@ -113,15 +113,28 @@ branches on, so treat these strings as API:
 | `no-banner` | the step ran and found no banner; the page is ungated, not consented |
 | `no-consent-step` | run with `--consent none`; consent was never touched |
 
+## Golden fixtures
+
+`test/fixtures/golden/` is the regression layer: one page per deliberate defect, one clean page,
+and per page a committed canonical capture plus the findings `detect` produces from it. CI diffs
+the findings on every push, so a changed rule either updates a golden deliberately or turns the
+build red.
+
+The pages hit the real tracking hosts and `test/helpers/tracking-stub.mjs` fulfils those requests
+inside the browser — the host detection matches survives into the capture, and nothing reaches the
+network. Regenerate with `npm run goldens:update` (needs a browser); see `CONTRIBUTING.md` for how
+to add one.
+
 ## Tests
 
 ```bash
-npm run test:pure   # no browser needed
-npm test            # adds the browser-backed suite
+npm run test:pure   # no browser needed — includes the golden findings diff
+npm test            # adds the browser-backed suite, which re-renders every fixture
 ```
 
 Browser-backed tests skip themselves when no browser is available — the summary still reads green,
-so check the test count, not just the exit code.
+so check the test count, not just the exit code. `TRACKING_DOCTOR_REQUIRE_BROWSER=1` turns that
+skip into a failure, which is what CI sets.
 
 ## Limits
 

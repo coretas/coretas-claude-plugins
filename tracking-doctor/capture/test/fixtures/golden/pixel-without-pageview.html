@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>pixel without pageview</title>
+<!-- Defect: the Meta Pixel fires a conversion event but never PageView, so
+     audiences and attribution windows have no baseline to build on. -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('consent', 'default', { ad_storage: 'granted', analytics_storage: 'granted' });
+  gtag('config', 'G-PIXEL1');
+  gtag('config', 'AW-123456789');
+  document.cookie = '_gcl_au=1.1.1234567890.1700000000';
+</script>
+<script src="https://www.googletagmanager.com/gtag/js?id=G-PIXEL1"></script>
+<script src="https://www.googletagmanager.com/gtag/js?id=AW-123456789"></script>
+<script src="https://connect.facebook.net/en_US/fbevents.js"></script>
+</head>
+<body>
+<h1>pixel without pageview</h1>
+<script>
+  var ga4 = 'https://www.google-analytics.com/g/collect?v=2&tid=G-PIXEL1&gcs=G111&en=';
+  new Image().src = ga4 + 'page_view';
+  new Image().src = ga4 + 'sign_up';
+  new Image().src = 'https://www.facebook.com/tr?id=1112223334445&ev=AddToCart';
+  new Image().src = 'https://www.googleadservices.com/pagead/conversion/123456789/?label=abc123';
+</script>
+</body>
+</html>
