@@ -35,7 +35,7 @@ checking that the manifests agree.
 repository root fails with `No plugin manifest found` — the command looks for
 `.claude-plugin/plugin.json` in the path you give it, and ours lives one level down.
 
-**The tag format is `tracking-doctor--v0.1.0`** — plugin name, `--v`, version.
+**The tag format is `tracking-doctor--v0.2.0`** — plugin name, `--v`, version.
 
 **Version drift is caught before the tag exists.** If `plugin.json` and the marketplace entry
 disagree, the command fails and names both values. Our marketplace entry deliberately carries no
