@@ -46,6 +46,27 @@ Detection tests (`lib/detect/**`) are pure — hand-built captures, no browser �
 in `test/unit/`, since `npm run test:pure` globs `test/unit/*.test.mjs`; a nested file is silently
 skipped and the suite still reports green.
 
+`skills/tracking-doctor/**` (`SKILL.md` and `references/*.md`) has its own pure suite,
+`test/unit/skill.test.mjs` — no browser, no network, same flat-directory rule as above. It
+asserts the token/byte budget below and that the reference filenames track
+`lib/detect/vocabulary.mjs`, so a renamed signal fails the build instead of silently orphaning a
+remediation file.
+
+## The skill's byte budget
+
+`SKILL.md` and `references/*.md` are read by the model on every matching session, so their size
+is a cost, not just documentation weight:
+
+| Surface | Limit |
+| --- | --- |
+| frontmatter `description` | 80–220 characters |
+| `SKILL.md` total file | ≤ 4096 bytes |
+| each `references/*.md` | ≤ 8192 bytes |
+
+These are asserted in bytes, in `test/unit/skill.test.mjs`. `claude plugin details` also reports
+a token estimate, but that figure carries an unexplained per-environment offset even on
+byte-identical content — treat it as an informational reading, not something to assert against.
+
 Anything a manual run writes goes under `/tmp/tracking-doctor/`. Never point `--out` at the working
 directory: this package sits inside the repository, and a scratch capture dropped beside the source
 is one `git add -A` away from being committed. Tests that need a file use `mkdtemp()` and clean up
