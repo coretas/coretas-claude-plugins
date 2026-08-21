@@ -4,17 +4,14 @@ Credential-free diagnostics for advertising measurement, packaged as Claude Code
 
 | Plugin | Status | What it does |
 | --- | --- | --- |
-| `tracking-doctor` | In development | Renders a page and reports what tracking actually fires |
-
-## Status
-
-**Early development.** The repository, manifests, and release flow are in place; the audit itself
-is not implemented yet. Installing the plugin today gives you a placeholder.
+| `tracking-doctor` | Available | Renders a page and reports what tracking actually fires |
 
 ## Install
 
 ```bash
 claude plugin marketplace add coretas/coretas-claude-plugins
+
+
 claude plugin install tracking-doctor@coretas
 ```
 
@@ -23,6 +20,10 @@ Verify what you installed:
 ```bash
 claude plugin details tracking-doctor
 ```
+
+Then ask Claude Code to audit a URL, e.g. "check what tracking fires on https://example.com". The
+first run installs one small dependency (`npm ci`, ~13 MB) if it isn't already present, and asks
+before doing anything larger, like downloading a browser.
 
 ## tracking-doctor
 
@@ -38,7 +39,9 @@ fire, across six signals:
 | `ga4_event_coverage` | Which GA4 events are actually sent? |
 | `consent_mode` | What is the consent default state before any banner interaction? |
 
-Each signal gets one of five outcomes: `ok`, `missing`, `mismatched`, `paused`, `not_firing`.
+Each finding is `ok`, `missing`, `mismatched`, or `not_firing`. (A fifth outcome, `paused`,
+exists in the shared vocabulary this plugin uses but describes container-config state a
+rendered page cannot show, so it is never emitted here.)
 
 No account. No OAuth. No credentials of any kind.
 

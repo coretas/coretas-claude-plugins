@@ -8,9 +8,10 @@ Capture and detection are two separate steps in this one package: capture **obse
 rendered page, and `detect` turns that observation into findings expressed in the backend's own
 vocabulary, so plugin output and a Coretas GTM audit can be compared string-for-string.
 
-> **Status: partial.** Capture (CRM-1581) and detection rules (CRM-1582) are done. The
-> human-readable report and golden fixtures against live pages land in CRM-1583/1584. Sections
-> marked _later_ below are placeholders to update as those ship.
+This package is the engine behind the `tracking-doctor` skill
+(`../skills/tracking-doctor/SKILL.md`), which is what an end user actually talks to. It runs this
+CLI for them — including the first-run `npm ci` — so nothing below is something a user of the
+plugin needs to do by hand. What follows is for developing or testing this package directly.
 
 ## Install
 
@@ -21,8 +22,9 @@ npm ci
 Needs a Chromium-based browser. An installed Chrome or Edge is preferred over downloading
 Chromium; if neither exists, run `npx playwright-core install chromium`.
 
-> _Later (CRM-1583):_ the skill will run `npm install` on first use, so end users never do this by
-> hand. `node_modules` is not shipped with the plugin.
+`node_modules` is not shipped with the plugin — a GitHub install of `tracking-doctor` arrives
+with this package's source and `package-lock.json` but no dependencies, so the skill runs `npm
+ci` on first use.
 
 ## Use
 
