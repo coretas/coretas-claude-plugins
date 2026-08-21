@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "tool": { "name": "tracking-doctor-capture", "version": "0.1.0", "playwright": "1.62.1" },
+  "browser": { "channel": "chrome", "version": "151.0.7922.138" },
+  "target": { "url": "https://example.test/", "finalUrl": "https://example.test/" },
+  "options": {
+    "timeoutMs": 30000,
+    "settleMs": 2000,
+    "consent": "accept",
+    "routes": ["/pricing"],
+    "dataLayerNames": ["dataLayer"],
+    "viewport": { "width": 1280, "height": 800 }
+  },
+  "run": {
+    "startedAt": "2026-08-19T10:00:00.000Z",
+    "durationMs": 4210,
+    "loaded": true,
+    "settled": true,
+    "timedOut": false
+  },
+  "consent": { "action": "accept", "matched": "selector=#onetrust-accept-btn-handler", "tMs": 1900 },
+  "navigations": [
+    { "tMs": 120, "kind": "navigation", "url": "https://example.test/", "route": null },
+    { "tMs": 3000, "kind": "route", "url": "/pricing", "route": "/pricing" }
+  ],
+  "requests": [
+    {
+      "tMs": 800,
+      "phase": "pre-consent",
+      "route": null,
+      "method": "GET",
+      "url": "https://www.googletagmanager.com/gtm.js?id=GTM-ABC123",
+      "resourceType": "script",
+      "postData": null,
+      "frameUrl": "https://example.test/",
+      "status": 200,
+      "failure": null
+    },
+    {
+      "tMs": 2100,
+      "phase": "post-consent",
+      "route": null,
+      "method": "GET",
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-ABC123&en=page_view&up.plan=pro&up.plan=trial",
+      "resourceType": "image",
+      "postData": null,
+      "frameUrl": "https://example.test/",
+      "status": 204,
+      "failure": null
+    },
+    {
+      "tMs": 2200,
+      "phase": "post-consent",
+      "route": null,
+      "method": "POST",
+      "url": "https://www.facebook.com/tr/",
+      "resourceType": "fetch",
+      "postData": "id=111222333&ev=PageView",
+      "frameUrl": "https://example.test/",
+      "status": 200,
+      "failure": null
+    },
+    {
+      "tMs": 3100,
+      "phase": "post-consent",
+      "route": "/pricing",
+      "method": "POST",
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-ABC123",
+      "resourceType": "fetch",
+      "postData": "en=page_view&dl=%2Fpricing\nen=scroll&epn.percent=90",
+      "frameUrl": "https://example.test/",
+      "status": 204,
+      "failure": null
+    },
+    {
+      "tMs": 3200,
+      "phase": "post-consent",
+      "route": "/pricing",
+      "method": "POST",
+      "url": "https://analytics.example.test/ingest",
+      "resourceType": "fetch",
+      "postData": "{\"events\":[{\"name\":\"page_view\"}]}",
+      "frameUrl": "https://example.test/",
+      "status": 200,
+      "failure": null
+    },
+    {
+      "tMs": 3300,
+      "phase": "post-consent",
+      "route": "/pricing",
+      "method": "GET",
+      "url": "https://blocked.example.test/pixel.gif",
+      "resourceType": "image",
+      "postData": null,
+      "frameUrl": "https://example.test/",
+      "status": null,
+      "failure": "net::ERR_BLOCKED_BY_CLIENT"
+    }
+  ],
+  "cookies": [
+    { "name": "_gcl_au", "domain": ".example.test", "path": "/", "secure": true, "httpOnly": false, "sameSite": "Lax", "session": false },
+    { "name": "session_id", "domain": "example.test", "path": "/", "secure": true, "httpOnly": true, "sameSite": "Strict", "session": true }
+  ],
+  "dataLayer": [
+    {
+      "source": "dataLayer",
+      "index": 0,
+      "tMs": 700,
+      "phase": "pre-consent",
+      "route": null,
+      "value": { "__type": "arguments", "values": ["js", { "__type": "date", "value": "2026-08-19T10:00:00.700Z" }] }
+    },
+    {
+      "source": "dataLayer",
+      "index": 1,
+      "tMs": 710,
+      "phase": "pre-consent",
+      "route": null,
+      "value": { "__type": "arguments", "values": ["config", "G-ABC123"] }
+    },
+    {
+      "source": "dataLayer",
+      "index": 2,
+      "tMs": 2150,
+      "phase": "post-consent",
+      "route": null,
+      "value": { "event": "page_view", "page_type": "home" }
+    }
+  ],
+  "errors": []
+}

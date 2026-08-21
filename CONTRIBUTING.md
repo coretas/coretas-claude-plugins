@@ -21,6 +21,57 @@ claude plugin validate ./tracking-doctor --strict
 `--strict` fails on unrecognised fields and missing metadata that the runtime tolerates. CI runs
 the same two commands, so a strict failure locally is a red build.
 
+## Testing the capture harness
+
+`tracking-doctor/capture` is a Node package with its own suite:
+
+```bash
+cd tracking-doctor/capture
+npm ci
+npm run test:pure   # pure units — no browser needed
+npm test            # adds the browser-backed suite
+```
+
+The browser-backed tests skip themselves when no Chromium-based browser is
+available, so `npm test` is green on a machine without one. CI installs Chromium
+so they actually run — check the job output, not just the exit code, if you are
+relying on them locally.
+
+Fixtures are served from `127.0.0.1` on an ephemeral port; the tests never reach
+the internet. `canonicalise()` exists to strip that port, timings and browser
+identity out of a capture so a golden fixture can be diffed against a live
+render.
+
+Detection tests (`lib/detect/**`) are pure — hand-built captures, no browser — and must live flat
+in `test/unit/`, since `npm run test:pure` globs `test/unit/*.test.mjs`; a nested file is silently
+skipped and the suite still reports green.
+
+`skills/tracking-doctor/**` (`SKILL.md` and `references/*.md`) has its own pure suite,
+`test/unit/skill.test.mjs` — no browser, no network, same flat-directory rule as above. It
+asserts the token/byte budget below and that the reference filenames track
+`lib/detect/vocabulary.mjs`, so a renamed signal fails the build instead of silently orphaning a
+remediation file.
+
+## The skill's byte budget
+
+`SKILL.md` and `references/*.md` are read by the model on every matching session, so their size
+is a cost, not just documentation weight:
+
+| Surface | Limit |
+| --- | --- |
+| frontmatter `description` | 80–220 characters |
+| `SKILL.md` total file | ≤ 4096 bytes |
+| each `references/*.md` | ≤ 8192 bytes |
+
+These are asserted in bytes, in `test/unit/skill.test.mjs`. `claude plugin details` also reports
+a token estimate, but that figure carries an unexplained per-environment offset even on
+byte-identical content — treat it as an informational reading, not something to assert against.
+
+Anything a manual run writes goes under `/tmp/tracking-doctor/`. Never point `--out` at the working
+directory: this package sits inside the repository, and a scratch capture dropped beside the source
+is one `git add -A` away from being committed. Tests that need a file use `mkdtemp()` and clean up
+after themselves.
+
 ## Testing an install locally
 
 ```bash

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>js heavy</title>
+<script>
+  // The GTM snippet shape: dataLayer created by the page, then pushed to.
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-JSHEAVY1');
+  dataLayer.push({ event: 'early_event', page_type: 'fixture' });
+</script>
+</head>
+<body>
+<h1>js heavy</h1>
+<!-- Fires with no JS at all, as a contrast case. -->
+<img src="/pixel.gif" alt="" width="1" height="1">
+<script>
+  // Nothing below fires until scripts execute, and not until a task later.
+  setTimeout(function () {
+    new Image().src = '/collect/g?v=2&tid=G-JSHEAVY1&en=page_view&dl=' + encodeURIComponent(location.href);
+    new Image().src = '/collect/ua?ua=' + encodeURIComponent(navigator.userAgent);
+    fetch('/collect/meta', { method: 'POST', body: 'id=111222333&ev=PageView&dl=' + encodeURIComponent(location.href) });
+    fetch('/collect/batch', {
+      method: 'POST',
+      body: 'en=scroll&epn.percent=90\nen=click&ep.link_id=cta',
+    });
+    dataLayer.push({ event: 'late_event', value: 42, nested: { deep: { deeper: true } } });
+  }, 120);
+</script>
+</body>
+</html>
