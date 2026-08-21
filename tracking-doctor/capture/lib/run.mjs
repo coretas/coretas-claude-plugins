@@ -189,7 +189,7 @@ export async function capture(options) {
 
   return {
     schemaVersion: SCHEMA_VERSION,
-    tool: { name: 'tracking-doctor-capture', version: '0.1.0', playwright: playwrightVersion() },
+    tool: { name: 'tracking-doctor-capture', version: toolVersion(), playwright: playwrightVersion() },
     browser: { channel, version },
     target: { url: opts.url, finalUrl },
     options: {
@@ -258,6 +258,14 @@ function remaining(deadline) {
 
 function firstLine(error) {
   return String(error?.message ?? error).split('\n')[0]
+}
+
+function toolVersion() {
+  try {
+    return createRequire(import.meta.url)('../package.json').version
+  } catch {
+    return null
+  }
 }
 
 function playwrightVersion() {
