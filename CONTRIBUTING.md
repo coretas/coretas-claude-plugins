@@ -95,6 +95,93 @@ golden unrepeatable.
    do what you thought — fix the page, not the table.
 4. Commit the `.html` and both goldens together.
 
+## Skill invocation and model-in-the-loop eval
+
+Everything above proves the machine is right. It cannot prove Claude loads the skill when a user
+says "why isn't my pixel working", or that having loaded it, the report names the defect the
+capture actually contains. That is what `eval/` covers, driven by `claude -p`.
+
+```bash
+npm run eval -- --dry-run       # what would run, spending nothing
+npm run eval:trigger            # does the skill load on realistic phrasing
+npm run eval:audit              # does the report name the right defect
+npm run eval                    # both, the way the nightly runs it
+```
+
+It needs credentials for `claude -p`, so it is **not** part of `npm test`. Everything around the
+API calls — prompts, report parsing, grading, tolerances, the CLI flags — is pure and does live in
+`npm run test:pure`, with an injected fake runner in place of the CLI.
+
+**The two layers.**
+
+| Layer | Prompt | Tools | What a failure means |
+| --- | --- | --- | --- |
+| trigger | `eval/prompts.mjs`, none of which name the skill | `Skill` only | the frontmatter `description` does not earn the load |
+| audit | one per golden fixture, pointed at its committed capture | `Skill`, `Bash`, `Read`, `Glob`, `Grep` | the model read correct findings and wrote the wrong thing |
+
+The trigger layer gets no shell on purpose: the question is whether the skill loads, and a shell
+turns a one-call check into a full page render. It also carries **negative controls** — prompts
+adjacent to tracking that must *not* pull the skill in, because over-triggering costs every
+unrelated session tokens.
+
+**The audit layer never renders anything.** It runs `detect` over a committed capture. A
+model-driven render would either reach the internet or observe six `missing` signals: the fixtures
+answer for the real tracking hosts, and only `test/helpers/tracking-stub.mjs` fulfils them, inside
+a browser context the tests control. Expectations come from the committed `<name>.findings.json`,
+never from a second table here — that is what `golden-intent` already pins.
+
+**The capture is staged before the run, and reading the answer key voids the run.**
+`<name>.findings.json` — the grading key — sits in the same directory as `<name>.capture.json`,
+and this layer has `Read` and `Glob`. So `eval/stage.mjs` copies the capture to a scratch directory
+as plain `capture.json`, and only that path reaches the prompt. Belt and braces: any run whose tool
+calls touch a `findings.json` or the golden directory is marked unusable whatever its report said,
+because a transcribed answer is not a derived one.
+
+**Tolerances live in `eval/tolerances.mjs`,** and the run reports a verdict against them rather
+than raw model output. A model run is not deterministic; without a stated tolerance every gate is
+either flaky or vacuous. A missed `not_firing` or `mismatched` fails outright — something believes
+it is measured and it is not — while a missed `missing` is allowed once, because on a real page it
+may be entirely deliberate. The negative controls are judged as a *rate*, not a count: an absolute
+cap would silently tighten threefold at `--repeats 3` and punish the one knob that makes the
+measurement better. Those numbers are calibration seeds, not measurements: tighten them from
+observed nightly history, and move one only in the commit that shows why.
+
+**A run that evaluated nothing is red.** A ratio of 0/0 is 1, so a mistyped `--only` would
+otherwise print a perfect score having called the API zero times. A selector that matches no
+prompt or fixture stops the run, and a layer that executed no runs fails. If a layer dies partway,
+what already completed still reaches the summary and the artefact.
+
+**The plugin is loaded with `--plugin-dir`,** which is session-scoped. An install-based harness
+would test the installer as much as the skill, and would write to the developer's real settings.
+
+**Nightly.** `.github/workflows/nightly-eval.yml` runs on a schedule and on demand — never on a
+push or a pull request, since a model run costs money and fork pull requests cannot read the
+secret. It needs `ANTHROPIC_API_KEY` in the repository secrets, and fails loudly when it is
+absent: a skipped eval reporting green is the same failure as a self-skipped golden suite. The
+verdict lands in the step summary and in an `eval-summary.json` artefact.
+
+The result is a claim about one model. `TRACKING_DOCTOR_EVAL_MODEL` (or `--model`) pins it, and the
+summary records which one answered.
+
+## Real-site smoke list
+
+`eval/sites.json` is the curated list re-run before each release, with a real browser and real
+network:
+
+```bash
+npm run smoke:sites
+npm run smoke:sites -- https://coretas.ai
+```
+
+It takes URLs and nothing else — an unknown flag is an error rather than a filtered-out argument,
+because there is no dry run and every accepted argument spends money.
+
+Statuses are pinned for `example.com` alone, where the ground truth has been stable for years.
+Everywhere else the assertion is that the run completes and the report is well formed across all
+six signals — a third-party site can add a tag any day, and a smoke run that goes red for that
+reason is one people learn to ignore. Every entry carries a `why`; an entry nobody can justify
+should be deleted rather than kept green.
+
 ## The skill's byte budget
 
 `SKILL.md` and `references/*.md` are read by the model on every matching session, so their size
