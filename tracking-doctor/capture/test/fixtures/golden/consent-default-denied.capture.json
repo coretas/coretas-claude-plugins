@@ -1,0 +1,260 @@
+{
+  "browser": {
+    "channel": "chromium"
+  },
+  "consent": {
+    "action": "accept",
+    "attempted": true,
+    "matched": "selector=#onetrust-accept-btn-handler",
+    "tMs": 0
+  },
+  "cookies": [
+    {
+      "domain": "fixture.test",
+      "httpOnly": false,
+      "name": "_gcl_au",
+      "path": "/golden",
+      "sameSite": "Lax",
+      "secure": false,
+      "session": true
+    }
+  ],
+  "dataLayer": [
+    {
+      "index": 0,
+      "phase": "pre-consent",
+      "route": null,
+      "source": "dataLayer",
+      "tMs": 0,
+      "value": {
+        "__type": "arguments",
+        "values": [
+          "js",
+          {
+            "__type": "date",
+            "value": "1970-01-01T00:00:00.000Z"
+          }
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "phase": "pre-consent",
+      "route": null,
+      "source": "dataLayer",
+      "tMs": 0,
+      "value": {
+        "__type": "arguments",
+        "values": [
+          "consent",
+          "default",
+          {
+            "ad_storage": "denied",
+            "analytics_storage": "denied"
+          }
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "phase": "pre-consent",
+      "route": null,
+      "source": "dataLayer",
+      "tMs": 0,
+      "value": {
+        "__type": "arguments",
+        "values": [
+          "config",
+          "G-DENIED1"
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "phase": "pre-consent",
+      "route": null,
+      "source": "dataLayer",
+      "tMs": 0,
+      "value": {
+        "__type": "arguments",
+        "values": [
+          "config",
+          "AW-123456789"
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "navigations": [
+    {
+      "kind": "navigation",
+      "route": null,
+      "tMs": 0,
+      "url": "http://fixture.test/golden/consent-default-denied.html"
+    }
+  ],
+  "options": {
+    "consent": "accept",
+    "dataLayerNames": [
+      "dataLayer"
+    ],
+    "routes": [],
+    "settleMs": 800,
+    "timeoutMs": 20000,
+    "viewport": {
+      "height": 800,
+      "width": 1280
+    }
+  },
+  "requests": [
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "about:blank",
+      "host": "fixture.test",
+      "method": "GET",
+      "params": {},
+      "path": "/golden/consent-default-denied.html",
+      "phase": "pre-consent",
+      "resourceType": "document",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "http://fixture.test/golden/consent-default-denied.html"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/consent-default-denied.html",
+      "host": "www.googletagmanager.com",
+      "method": "GET",
+      "params": {
+        "id": "G-DENIED1"
+      },
+      "path": "/gtag/js",
+      "phase": "pre-consent",
+      "resourceType": "script",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://www.googletagmanager.com/gtag/js?id=G-DENIED1"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/consent-default-denied.html",
+      "host": "www.googletagmanager.com",
+      "method": "GET",
+      "params": {
+        "id": "AW-123456789"
+      },
+      "path": "/gtag/js",
+      "phase": "pre-consent",
+      "resourceType": "script",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://www.googletagmanager.com/gtag/js?id=AW-123456789"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/consent-default-denied.html",
+      "host": "connect.facebook.net",
+      "method": "GET",
+      "params": {},
+      "path": "/en_US/fbevents.js",
+      "phase": "pre-consent",
+      "resourceType": "script",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://connect.facebook.net/en_US/fbevents.js"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/consent-default-denied.html",
+      "host": "www.google-analytics.com",
+      "method": "GET",
+      "params": {
+        "en": "page_view",
+        "gcs": "G100",
+        "tid": "G-DENIED1",
+        "v": "2"
+      },
+      "path": "/g/collect",
+      "phase": "consent-click",
+      "resourceType": "image",
+      "route": null,
+      "status": 204,
+      "tMs": 0,
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-DENIED1&gcs=G100&en=page_view"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/consent-default-denied.html",
+      "host": "www.google-analytics.com",
+      "method": "GET",
+      "params": {
+        "en": "sign_up",
+        "gcs": "G100",
+        "tid": "G-DENIED1",
+        "v": "2"
+      },
+      "path": "/g/collect",
+      "phase": "consent-click",
+      "resourceType": "image",
+      "route": null,
+      "status": 204,
+      "tMs": 0,
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-DENIED1&gcs=G100&en=sign_up"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/consent-default-denied.html",
+      "host": "www.facebook.com",
+      "method": "GET",
+      "params": {
+        "ev": "PageView",
+        "id": "1112223334445"
+      },
+      "path": "/tr",
+      "phase": "consent-click",
+      "resourceType": "image",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://www.facebook.com/tr?id=1112223334445&ev=PageView"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/consent-default-denied.html",
+      "host": "www.googleadservices.com",
+      "method": "GET",
+      "params": {
+        "label": "abc123"
+      },
+      "path": "/pagead/conversion/123456789/",
+      "phase": "consent-click",
+      "resourceType": "image",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://www.googleadservices.com/pagead/conversion/123456789/?label=abc123"
+    }
+  ],
+  "run": {
+    "durationMs": 0,
+    "settled": true,
+    "timedOut": false
+  },
+  "schemaVersion": 1,
+  "target": {
+    "finalUrl": "http://fixture.test/golden/consent-default-denied.html",
+    "url": "http://fixture.test/golden/consent-default-denied.html"
+  }
+}

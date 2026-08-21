@@ -71,6 +71,10 @@ export async function capture(options) {
       maxDepth: opts.maxDepth,
     })
 
+    // Seam for the golden suite, which fulfils the real tracking hosts offline.
+    // Unset on every real run, so a live capture behaves exactly as before.
+    if (opts.onContext) await opts.onContext(context)
+
     context.on('request', (request) => {
       const entry = {
         tMs: elapsed(),

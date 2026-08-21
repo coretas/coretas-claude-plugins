@@ -233,6 +233,9 @@ function buildRewrites(urls, placeholder) {
     if (!url) continue
     add(url.origin, placeholder)
     add(url.host, placeholderHost)
+    // A cookie's `domain` carries the bare hostname, with no port, so the
+    // `host` rewrite above never matches it and the real host survives.
+    add(url.hostname, placeholderHost)
   }
   return [...pairs.entries()].sort((a, b) => b[0].length - a[0].length)
 }
