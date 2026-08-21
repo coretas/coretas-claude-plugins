@@ -4,21 +4,13 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, it } from 'node:test'
 
+import { SIGNAL_LABELS } from '../../eval/labels.mjs'
 import { SIGNAL_ORDER } from '../../lib/detect/vocabulary.mjs'
 
 // Resolved relative to this file, not process.cwd(), so the suite works from any invocation dir.
 const SKILL_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'skills', 'tracking-doctor')
 const SKILL_PATH = join(SKILL_DIR, 'SKILL.md')
 const REFERENCES_DIR = join(SKILL_DIR, 'references')
-
-const SIGNAL_LABELS = {
-  ga4_config: 'GA4 configuration',
-  meta_pixel: 'Meta Pixel',
-  conversion_linker: 'Conversion linker',
-  google_ads_conversion: 'Google Ads conversions',
-  ga4_event_coverage: 'GA4 event coverage',
-  consent_mode: 'Consent mode',
-}
 
 const STATUS_HEADINGS = ['not firing', 'inconsistent', 'not present', 'What it cannot tell you']
 
