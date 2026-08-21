@@ -1,0 +1,133 @@
+{
+  "findings": [
+    {
+      "detail": "GA4 measurement ID G-DUP1 sent 3 hit(s).",
+      "observed_values": {
+        "failed_hit_count": 0,
+        "hit_count": 3,
+        "loader_urls": [
+          "https://www.googletagmanager.com/gtag/js?id=AW-123456789",
+          "https://www.googletagmanager.com/gtag/js?id=G-DUP1"
+        ],
+        "measurement_ids_declared": [
+          "G-DUP1"
+        ],
+        "measurement_ids_observed": [
+          "G-DUP1"
+        ]
+      },
+      "signal": "ga4_config",
+      "status": "ok",
+      "tag_names": []
+    },
+    {
+      "detail": "Meta Pixel 1112223334445 sent PageView and 1 event(s) in total.",
+      "observed_values": {
+        "events": [
+          "PageView"
+        ],
+        "failed_hit_count": 0,
+        "hit_count": 1,
+        "loader_seen": true,
+        "pixel_ids": [
+          "1112223334445"
+        ]
+      },
+      "signal": "meta_pixel",
+      "status": "ok",
+      "tag_names": []
+    },
+    {
+      "detail": "Conversion linker active: _gcl_au cookie.",
+      "observed_values": {
+        "google_tagging": true,
+        "linker_cookies": [
+          "_gcl_au"
+        ],
+        "linker_params": []
+      },
+      "signal": "conversion_linker",
+      "status": "ok",
+      "tag_names": []
+    },
+    {
+      "detail": "Google Ads conversion 123456789 fired with label(s) abc123.",
+      "observed_values": {
+        "conversion_ids_declared": [
+          "AW-123456789"
+        ],
+        "conversion_ids_observed": [
+          "123456789"
+        ],
+        "failed_hit_count": 0,
+        "hit_count": 1,
+        "labels": [
+          "abc123"
+        ],
+        "remarketing_only": false
+      },
+      "signal": "google_ads_conversion",
+      "status": "ok",
+      "tag_names": []
+    },
+    {
+      "detail": "page_view was sent 2 times within one second, which will inflate counts.",
+      "observed_values": {
+        "automatic_events": [
+          "page_view"
+        ],
+        "custom_events": [
+          "sign_up"
+        ],
+        "duplicates": [
+          {
+            "count": 2,
+            "first_t_ms": 0,
+            "last_t_ms": 0,
+            "name": "page_view",
+            "phase": "pre-consent",
+            "route": null,
+            "tid": "G-DUP1"
+          }
+        ],
+        "events": [
+          "page_view",
+          "sign_up"
+        ]
+      },
+      "signal": "ga4_event_coverage",
+      "status": "mismatched",
+      "tag_names": []
+    },
+    {
+      "detail": "Consent mode active; observed states: G111.",
+      "observed_values": {
+        "commands": [
+          {
+            "kind": "default",
+            "payload": {
+              "ad_storage": "granted",
+              "analytics_storage": "granted"
+            },
+            "phase": "pre-consent"
+          }
+        ],
+        "gcd_values": [],
+        "gcs_values": [
+          "G111"
+        ],
+        "phases_seen": [
+          "pre-consent"
+        ]
+      },
+      "signal": "consent_mode",
+      "status": "ok",
+      "tag_names": []
+    }
+  ],
+  "schemaVersion": 1,
+  "target": {
+    "finalUrl": "http://fixture.test/golden/duplicate-gtag.html",
+    "url": "http://fixture.test/golden/duplicate-gtag.html"
+  }
+}

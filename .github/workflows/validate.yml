@@ -40,5 +40,10 @@ jobs:
         run: npm run test:pure
       - name: Install Chromium
         run: npx playwright-core install --with-deps chromium
-      - name: Full suite (browser-backed)
+      - name: Full suite (browser-backed, golden fixtures diffed)
         run: npm test
+        env:
+          # Chromium is installed by the step above, so a self-skipped golden
+          # suite here means something is wrong with browser resolution rather
+          # than with the machine. Fail instead of reporting green on nothing.
+          TRACKING_DOCTOR_REQUIRE_BROWSER: '1'

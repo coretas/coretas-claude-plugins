@@ -33,9 +33,9 @@ npm test            # adds the browser-backed suite
 ```
 
 The browser-backed tests skip themselves when no Chromium-based browser is
-available, so `npm test` is green on a machine without one. CI installs Chromium
-so they actually run — check the job output, not just the exit code, if you are
-relying on them locally.
+available, so `npm test` is green on a machine without one. Set
+`TRACKING_DOCTOR_REQUIRE_BROWSER=1` to turn that skip into a failure — CI does, because a
+self-skipped golden suite reports green having diffed nothing, which is worse than a red build.
 
 Fixtures are served from `127.0.0.1` on an ephemeral port; the tests never reach
 the internet. `canonicalise()` exists to strip that port, timings and browser
@@ -51,6 +51,49 @@ skipped and the suite still reports green.
 asserts the token/byte budget below and that the reference filenames track
 `lib/detect/vocabulary.mjs`, so a renamed signal fails the build instead of silently orphaning a
 remediation file.
+
+## Golden fixtures
+
+`test/fixtures/golden/` holds one HTML page per deliberate defect, plus a `healthy` page with
+none. Each page carries two committed goldens:
+
+| File | What it is |
+| --- | --- |
+| `<name>.capture.json` | the canonical render — the offline input, so the diff needs no browser |
+| `<name>.findings.json` | what `detect` makes of it — the contract CI diffs on every push |
+
+The fixtures use the **real** tracking hosts (`www.google-analytics.com/g/collect`,
+`www.googletagmanager.com/gtag/js`, …), because `lib/detect/endpoints.mjs` matches those exactly:
+a fixture pointed at `127.0.0.1` detects as six `missing` findings and proves nothing.
+`test/helpers/tracking-stub.mjs` fulfils them inside the browser, so the real host survives into
+the capture while no test ever reaches the network. A request to any other external host is
+aborted and fails the run rather than being quietly allowed through.
+
+Regenerating needs a browser:
+
+```bash
+npm run goldens:update
+```
+
+That script writes files and nothing else. What decides whether a golden is *right* is
+`test/unit/golden-intent.test.mjs`, which holds the status every fixture was written to produce —
+so a regenerate that blesses a bug fails instead of landing. Update that table in the same commit
+as the fixture, never afterwards.
+
+Detection in the golden path always runs over `canonicalise()`d input. A live render carries the
+fixture server's ephemeral port and real millisecond offsets, and both otherwise reach
+`target.url` and the duplicate groups' `first_t_ms` / `last_t_ms`, where they make a committed
+golden unrepeatable.
+
+### Adding a fixture
+
+1. Write `test/fixtures/golden/<name>.html` as a healthy page with exactly one defect. Everything
+   beyond that defect should stay `ok`, so the golden isolates it.
+2. Add `<name>` to `INTENT` in `test/unit/golden-intent.test.mjs`, listing the signals you expect
+   to go non-ok.
+3. `npm run goldens:update`, then `npm run test:pure`. A red intent test means the page does not
+   do what you thought — fix the page, not the table.
+4. Commit the `.html` and both goldens together.
 
 ## The skill's byte budget
 

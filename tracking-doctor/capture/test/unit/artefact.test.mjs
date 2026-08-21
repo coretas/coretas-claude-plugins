@@ -138,6 +138,17 @@ test('canonicalise rewrites the target origin out of urls, hosts and params', ()
   assert.ok(!JSON.stringify(canonical).includes('54321'), 'no ephemeral port may survive')
 })
 
+test('canonicalise rewrites the bare hostname a cookie domain carries', () => {
+  const canonical = canonicalise({
+    target: { url: 'http://127.0.0.1:54321/index.html', finalUrl: 'http://127.0.0.1:54321/index.html' },
+    requests: [],
+    cookies: [{ name: '_gcl_au', domain: '127.0.0.1', path: '/' }],
+  })
+
+  assert.equal(canonical.cookies[0].domain, 'fixture.test')
+  assert.ok(!JSON.stringify(canonical).includes('127.0.0.1'), 'no real host may survive')
+})
+
 test('canonicalise flattens a Date pushed by gtag', () => {
   const canonical = canonicalise({
     target: { url: 'http://fixture.test/' },

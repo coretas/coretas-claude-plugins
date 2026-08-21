@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>paused tag</title>
+<!-- Defect: every loader and every config command is present, and nothing ever
+     sends a hit — what a paused container tag looks like from the page.
+     A rendered page cannot tell paused from disabled or from a trigger this
+     page never satisfies, so the golden says `not_firing`, not `paused`.
+     Pinning that is the point of this fixture. -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-PAUSED1');
+  gtag('config', 'AW-123456789');
+</script>
+<script src="https://www.googletagmanager.com/gtag/js?id=G-PAUSED1"></script>
+<script src="https://www.googletagmanager.com/gtag/js?id=AW-123456789"></script>
+<script src="https://connect.facebook.net/en_US/fbevents.js"></script>
+</head>
+<body>
+<h1>paused tag</h1>
+</body>
+</html>

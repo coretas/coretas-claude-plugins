@@ -1,0 +1,157 @@
+{
+  "browser": {
+    "channel": "chromium"
+  },
+  "consent": {
+    "action": "accept",
+    "attempted": false,
+    "matched": null,
+    "tMs": null
+  },
+  "cookies": [],
+  "dataLayer": [
+    {
+      "index": 0,
+      "phase": "pre-consent",
+      "route": null,
+      "source": "dataLayer",
+      "tMs": 0,
+      "value": {
+        "__type": "arguments",
+        "values": [
+          "js",
+          {
+            "__type": "date",
+            "value": "1970-01-01T00:00:00.000Z"
+          }
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "phase": "pre-consent",
+      "route": null,
+      "source": "dataLayer",
+      "tMs": 0,
+      "value": {
+        "__type": "arguments",
+        "values": [
+          "config",
+          "G-PAUSED1"
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "phase": "pre-consent",
+      "route": null,
+      "source": "dataLayer",
+      "tMs": 0,
+      "value": {
+        "__type": "arguments",
+        "values": [
+          "config",
+          "AW-123456789"
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "navigations": [
+    {
+      "kind": "navigation",
+      "route": null,
+      "tMs": 0,
+      "url": "http://fixture.test/golden/paused-tag.html"
+    }
+  ],
+  "options": {
+    "consent": "accept",
+    "dataLayerNames": [
+      "dataLayer"
+    ],
+    "routes": [],
+    "settleMs": 800,
+    "timeoutMs": 20000,
+    "viewport": {
+      "height": 800,
+      "width": 1280
+    }
+  },
+  "requests": [
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "about:blank",
+      "host": "fixture.test",
+      "method": "GET",
+      "params": {},
+      "path": "/golden/paused-tag.html",
+      "phase": "pre-consent",
+      "resourceType": "document",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "http://fixture.test/golden/paused-tag.html"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/paused-tag.html",
+      "host": "www.googletagmanager.com",
+      "method": "GET",
+      "params": {
+        "id": "G-PAUSED1"
+      },
+      "path": "/gtag/js",
+      "phase": "pre-consent",
+      "resourceType": "script",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://www.googletagmanager.com/gtag/js?id=G-PAUSED1"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/paused-tag.html",
+      "host": "www.googletagmanager.com",
+      "method": "GET",
+      "params": {
+        "id": "AW-123456789"
+      },
+      "path": "/gtag/js",
+      "phase": "pre-consent",
+      "resourceType": "script",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://www.googletagmanager.com/gtag/js?id=AW-123456789"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/paused-tag.html",
+      "host": "connect.facebook.net",
+      "method": "GET",
+      "params": {},
+      "path": "/en_US/fbevents.js",
+      "phase": "pre-consent",
+      "resourceType": "script",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://connect.facebook.net/en_US/fbevents.js"
+    }
+  ],
+  "run": {
+    "durationMs": 0,
+    "settled": true,
+    "timedOut": false
+  },
+  "schemaVersion": 1,
+  "target": {
+    "finalUrl": "http://fixture.test/golden/paused-tag.html",
+    "url": "http://fixture.test/golden/paused-tag.html"
+  }
+}
