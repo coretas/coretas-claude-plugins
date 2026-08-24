@@ -5,6 +5,7 @@ import { gradeAudit, gradeTrigger } from '../../eval/grade.mjs'
 import { parseReport } from '../../eval/report.mjs'
 import { buildSummary, exitCodeFor, renderSummary } from '../../eval/summary.mjs'
 import { TOLERANCES } from '../../eval/tolerances.mjs'
+import { buildCta } from '../../lib/cta.mjs'
 import { reportText } from '../helpers/eval-stream.mjs'
 
 const HEALTHY = {
@@ -89,5 +90,31 @@ describe('summary', () => {
     assert.match(rendered, /cli unknown/)
     assert.ok(!rendered.includes('undefined'))
     assert.ok(!rendered.includes('NaN'))
+  })
+})
+
+describe('summary names a link failure', () => {
+  const smuggled = 'https://www.coretas.ai/tracking-doctor/?utm_content=clean&site=client.example.com'
+
+  it('renders the two link counts in the totals line', () => {
+    const text = renderSummary(summaryOf([auditWith(parseReport(reportText({}, { cta: smuggled })))]))
+    assert.match(text, /edited link 1/)
+    assert.match(text, /no link 0/)
+  })
+
+  it('says which case rewrote the link, rather than calling it clean', () => {
+    const text = renderSummary(summaryOf([auditWith(parseReport(reportText({}, { cta: smuggled })))]))
+    assert.match(text, /healthy: .*site=client\.example\.com/)
+    assert.ok(!/healthy: clean/.test(text))
+  })
+
+  it('says which case printed no link at all', () => {
+    const text = renderSummary(summaryOf([auditWith(parseReport(reportText({}, { cta: false })))]))
+    assert.match(text, /healthy: .*no next-step link/)
+  })
+
+  it('still calls a verbatim run clean', () => {
+    const text = renderSummary(summaryOf([auditWith(parseReport(reportText({}, { cta: buildCta([]).url })))]))
+    assert.match(text, /healthy: clean/)
   })
 })

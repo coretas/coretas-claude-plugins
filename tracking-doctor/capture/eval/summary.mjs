@@ -59,14 +59,22 @@ function describe(layer) {
   return [
     `${layer.metrics.cases} case(s) · missed critical ${totals.missedCritical} · missed soft ` +
       `${totals.missedSoft} · false positives ${totals.falsePositives} · wrong status ` +
-      `${totals.wrongStatus} · unusable ${totals.unusable}`,
+      `${totals.wrongStatus} · no link ${totals.missingCta} · edited link ${totals.editedCta} · ` +
+      `unusable ${totals.unusable}`,
     ...perCase.map((entry) => `  ${entry.name}: ${caseLine(entry)}`),
   ]
 }
 
 function caseLine(entry) {
   if (entry.unusable) return `unusable (${entry.reason})`
-  const problems = [...entry.missedCritical, ...entry.missedSoft, ...entry.falsePositives, ...entry.wrongStatus]
+  const problems = [
+    ...entry.missedCritical,
+    ...entry.missedSoft,
+    ...entry.falsePositives,
+    ...entry.wrongStatus,
+    ...entry.missingCta,
+    ...entry.editedCta,
+  ]
   return problems.length === 0 ? 'clean' : problems.join('; ')
 }
 

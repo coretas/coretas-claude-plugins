@@ -26,6 +26,10 @@ export const TOLERANCES = Object.freeze({
   maxFalsePositivesTotal: 2,
   /** Right signal named, wrong status against it. */
   maxWrongStatusTotal: 1,
+  /** Report omitted the next-step link. Costs a lead, leaks nothing. */
+  maxMissingCtaTotal: 1,
+  /** Report rewrote the link. Non-negotiable: its query string is a privacy promise. */
+  maxEditedCtaTotal: 0,
   /** A report that cannot be parsed at all, or a run that errored out. */
   maxUnusableRuns: 0,
 })

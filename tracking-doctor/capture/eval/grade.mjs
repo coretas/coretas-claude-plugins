@@ -2,9 +2,10 @@
  * Turns runs into a verdict against TOLERANCES. Pure: it takes already-collected
  * runs, so the thresholds are testable without spending a token.
  */
-import { STATUSES } from '../lib/detect/vocabulary.mjs'
+import { buildCta } from '../lib/cta.mjs'
+import { SIGNAL_ORDER, STATUSES } from '../lib/detect/vocabulary.mjs'
 import { isCritical } from './labels.mjs'
-import { isUsableReport } from './report.mjs'
+import { isUsableReport, linkShape } from './report.mjs'
 import { TOLERANCES } from './tolerances.mjs'
 
 const ratio = (part, whole) => (whole === 0 ? 1 : part / whole)
@@ -80,6 +81,8 @@ export function gradeAudit(runs, tolerances = TOLERANCES) {
     missedSoft: total('missedSoft'),
     falsePositives: total('falsePositives'),
     wrongStatus: total('wrongStatus'),
+    missingCta: total('missingCta'),
+    editedCta: total('editedCta'),
     unusable: perCase.filter((entry) => entry.unusable).length,
   }
 
@@ -90,6 +93,8 @@ export function gradeAudit(runs, tolerances = TOLERANCES) {
   cap(totals.missedSoft, tolerances.maxMissedSoftDefects, 'missed soft defect(s)')
   cap(totals.falsePositives, tolerances.maxFalsePositivesTotal, 'false positive(s)')
   cap(totals.wrongStatus, tolerances.maxWrongStatusTotal, 'wrong status(es)')
+  cap(totals.missingCta, tolerances.maxMissingCtaTotal, 'report(s) with no next-step link')
+  cap(totals.editedCta, tolerances.maxEditedCtaTotal, 'edited next-step link(s)')
   cap(totals.unusable, tolerances.maxUnusableRuns, 'unusable run(s)')
 
   return { layer: 'audit', metrics: { cases: perCase.length, totals, perCase }, violations }
@@ -104,6 +109,8 @@ function gradeAuditRun(run, tolerances, violations) {
     missedSoft: [],
     falsePositives: [],
     wrongStatus: [],
+    missingCta: [],
+    editedCta: [],
     reported: run.parsed?.statuses ?? {},
   }
 
@@ -145,6 +152,8 @@ function gradeAuditRun(run, tolerances, violations) {
     }
   }
 
+  gradeCta(run, entry)
+
   if (entry.falsePositives.length > tolerances.maxFalsePositivesPerCase) {
     violations.push(
       `${run.name}: ${entry.falsePositives.length} false positive(s), per-case cap is ` +
@@ -154,6 +163,33 @@ function gradeAuditRun(run, tolerances, violations) {
 
   return entry
 }
+
+/**
+ * Two bases are legitimate and neither alone is right: the link detection handed
+ * the model, and the link its own table implies. Grading on the golden alone
+ * counts a misread signal twice; grading on the report alone calls a verbatim
+ * link tampered whenever the table above it is wrong. A URL matching neither is
+ * one the model wrote by hand, which is what README's promise rests on.
+ */
+function gradeCta(run, entry) {
+  const fromGolden = buildCta(asFindings(run.expected)).url
+  const fromReport = buildCta(asFindings(entry.reported)).url
+  const acceptable = new Set([linkShape(fromGolden), linkShape(fromReport)])
+  const printed = run.parsed?.ctaUrls ?? []
+  entry.cta = { expected: fromGolden, alsoAcceptable: fromReport, printed }
+
+  if (printed.length === 0) {
+    entry.missingCta.push('report printed no next-step link')
+    return
+  }
+  for (const url of new Set(printed.filter((candidate) => !acceptable.has(linkShape(candidate))))) {
+    entry.editedCta.push(`printed ${url}, which matches neither ${fromGolden} nor ${fromReport}`)
+  }
+}
+
+/** An absent status defaults to ok only to build a candidate; both candidates are accepted. */
+const asFindings = (statuses) =>
+  SIGNAL_ORDER.map((signal) => ({ signal, status: statuses?.[signal] ?? STATUSES.ok }))
 
 export function verdict(layers) {
   const violations = layers.flatMap((layer) => layer.violations.map((text) => `[${layer.layer}] ${text}`))
