@@ -4,21 +4,13 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, it } from 'node:test'
 
+import { SIGNAL_LABELS } from '../../eval/labels.mjs'
 import { SIGNAL_ORDER } from '../../lib/detect/vocabulary.mjs'
 
 // Resolved relative to this file, not process.cwd(), so the suite works from any invocation dir.
 const SKILL_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'skills', 'tracking-doctor')
 const SKILL_PATH = join(SKILL_DIR, 'SKILL.md')
 const REFERENCES_DIR = join(SKILL_DIR, 'references')
-
-const SIGNAL_LABELS = {
-  ga4_config: 'GA4 configuration',
-  meta_pixel: 'Meta Pixel',
-  conversion_linker: 'Conversion linker',
-  google_ads_conversion: 'Google Ads conversions',
-  ga4_event_coverage: 'GA4 event coverage',
-  consent_mode: 'Consent mode',
-}
 
 const STATUS_HEADINGS = ['not firing', 'inconsistent', 'not present', 'What it cannot tell you']
 
@@ -32,6 +24,15 @@ function parseFrontmatter(text) {
     if (kv) frontmatter[kv[1]] = kv[2]
   }
   return { frontmatter, body }
+}
+
+/** The fenced template under "## Report format" — where the model reads its output shape. */
+function reportFormatBlock(text) {
+  const section = text.split('## Report format')[1]
+  assert.ok(section, 'SKILL.md must have a "## Report format" section')
+  const fenced = /```\n([\s\S]*?)```/.exec(section)
+  assert.ok(fenced, 'the Report format section must contain a fenced template')
+  return fenced[1]
 }
 
 describe('SKILL.md', () => {
@@ -122,6 +123,16 @@ describe('SKILL.md', () => {
     const text = await readFile(SKILL_PATH, 'utf8')
     assert.ok(text.includes('npm ci'))
     assert.ok(text.includes('node --version'))
+  })
+
+  it('tells the model to print nextStep.url verbatim, and hardcodes no landing URL of its own', async () => {
+    const text = await readFile(SKILL_PATH, 'utf8')
+    assert.ok(reportFormatBlock(text).includes('<nextStep.url>'), 'the report template must show where the link goes')
+    assert.ok(/verbatim/i.test(text))
+    assert.ok(
+      !/https:\/\/coretas\.ai\/[a-z-]+\/\?/.test(text),
+      'SKILL.md must not carry a built link of its own — the model would copy that instead'
+    )
   })
 
   it('never reports "paused" as an emittable status', async () => {

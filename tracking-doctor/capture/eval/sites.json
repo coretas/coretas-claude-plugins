@@ -1,0 +1,27 @@
+{
+  "note": "Pre-release smoke list. Real pages, real network. Statuses are pinned only where the ground truth is stable — a third-party site can add or remove a tag any day, and a smoke run that fails for that reason trains people to ignore it. For the rest the assertion is that the run completes and the report is well formed across all six signals.",
+  "sites": [
+    {
+      "url": "https://example.com",
+      "why": "No tracking at all, and it has served the same static page for years. Proves the pipeline reports nothing when nothing fires, rather than inventing a finding.",
+      "expect": {
+        "ga4_config": "missing",
+        "meta_pixel": "missing",
+        "conversion_linker": "missing",
+        "google_ads_conversion": "missing",
+        "ga4_event_coverage": "missing",
+        "consent_mode": "missing"
+      }
+    },
+    {
+      "url": "https://coretas.ai",
+      "why": "Our own site: the one page in this list whose tracking we can change on purpose, so a surprising result here is ours to explain.",
+      "expect": {}
+    },
+    {
+      "url": "https://playwright.dev",
+      "why": "A JS-heavy documentation site that does carry analytics, so the run exercises a non-empty capture end to end.",
+      "expect": {}
+    }
+  ]
+}

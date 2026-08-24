@@ -116,6 +116,9 @@
       "tag_names": []
     }
   ],
+  "nextStep": {
+    "url": "https://coretas.ai/tracking-doctor/?utm_source=tracking-doctor&utm_medium=plugin&utm_campaign=tracking-doctor-report&utm_content=consent_mode-mismatched"
+  },
   "schemaVersion": 1,
   "target": {
     "finalUrl": "http://fixture.test/golden/consent-default-denied.html",

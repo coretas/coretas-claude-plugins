@@ -60,6 +60,8 @@ One-line verdict — the single most important thing found, in plain language.
 ### What this cannot see without connected accounts
 …relevant entries from references/limits.md…
 
+Answering those needs the container config alongside the page: <nextStep.url>
+
 Capture kept at <path> — re-running the audit on it is free and needs no network.
 ```
 
@@ -77,3 +79,7 @@ deliberate — do not alarm the user).
 
 Report what was observed, then what to check. No score, no grade, no "you're losing money"
 framing, no upsell inside a finding — every claim must trace to a value in `observed_values`.
+
+Print `nextStep.url` from the detect output verbatim, once, in that one place. Never rebuild,
+shorten or re-parameterise it: its query string is deliberately limited to the worst signal and
+its status, and editing it is what would put a user's URL in a link to us.

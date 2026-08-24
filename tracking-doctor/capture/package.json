@@ -1,6 +1,6 @@
 {
   "name": "tracking-doctor-capture",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Headless render harness: records what tracking actually fires on a page.",
@@ -12,7 +12,11 @@
     "test:pure": "node --test test/unit/*.test.mjs",
     "capture": "node capture.mjs capture",
     "replay": "node capture.mjs replay",
-    "goldens:update": "node scripts/update-goldens.mjs"
+    "goldens:update": "node scripts/update-goldens.mjs",
+    "eval": "node scripts/run-eval.mjs",
+    "eval:trigger": "node scripts/run-eval.mjs --layer trigger",
+    "eval:audit": "node scripts/run-eval.mjs --layer audit",
+    "smoke:sites": "node scripts/smoke-sites.mjs"
   },
   "dependencies": {
     "playwright-core": "^1.62.1"

@@ -136,6 +136,22 @@ Browser-backed tests skip themselves when no browser is available — the summar
 so check the test count, not just the exit code. `TRACKING_DOCTOR_REQUIRE_BROWSER=1` turns that
 skip into a failure, which is what CI sets.
 
+## Model-in-the-loop eval
+
+`eval/` answers a different question from the suites above: not whether detection is right, but
+whether Claude loads this skill on realistic phrasing, and whether the report it writes names the
+defect the capture contains. It drives `claude -p`, so it needs credentials and is not part of
+`npm test`.
+
+```bash
+npm run eval -- --dry-run   # the planned runs, spending nothing
+npm run eval                # trigger and audit layers, verdict against eval/tolerances.mjs
+npm run smoke:sites         # the curated real-site list, before a release
+```
+
+The audit layer reads the committed golden captures rather than rendering anything, so it needs no
+browser and no network. `CONTRIBUTING.md` has the layers, the tolerances and the nightly workflow.
+
 ## Limits
 
 It sees the rendered page, not your tag manager config. It can tell you a hit went out with a given

@@ -1,0 +1,96 @@
+name: Nightly eval
+
+# Model-in-the-loop, so it costs money and is not deterministic: it runs on a
+# schedule and on demand, never on a push or a pull request. Fork pull requests
+# cannot read the secret anyway, and a per-push model run would spend real money
+# on every typo.
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      layer:
+        description: 'trigger, audit or all'
+        type: choice
+        default: all
+        options: [all, trigger, audit]
+      repeats:
+        description: 'Trigger repeats per phrasing'
+        default: '1'
+      model:
+        description: 'Model to pin the run to'
+        default: sonnet
+
+concurrency:
+  group: nightly-eval
+  cancel-in-progress: false
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    # Worst case is 17 runs (10 trigger + 7 audit) at the 240 s per-run ceiling,
+    # so ~70 minutes at one repeat. A hard cancel leaves no verdict and no
+    # artefact, which is the one outcome worse than a red build.
+    timeout-minutes: 90
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    defaults:
+      run:
+        working-directory: tracking-doctor/capture
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tracking-doctor/capture/package-lock.json
+
+      # A missing key must be a red build, not a green one that evaluated
+      # nothing — the same rule the golden suite applies to a missing browser.
+      - name: Require credentials
+        run: |
+          if [ -z "${ANTHROPIC_API_KEY}" ]; then
+            echo "ANTHROPIC_API_KEY is not set for this repository." >&2
+            echo "The eval cannot run, and a skipped eval must not report green." >&2
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npm install -g @anthropic-ai/claude-code
+
+      # No browser step: the audit layer reads the committed golden captures, so
+      # nothing here renders a page or reaches the network.
+      # Dispatch inputs reach the shell as environment variables, never spliced
+      # into the command line: `repeats` is free text, and this step holds the
+      # API key.
+      - name: Eval
+        env:
+          TRACKING_DOCTOR_EVAL_MODEL: ${{ inputs.model || 'sonnet' }}
+          EVAL_LAYER: ${{ inputs.layer || 'all' }}
+          EVAL_REPEATS: ${{ inputs.repeats || '1' }}
+        run: |
+          case "${EVAL_LAYER}" in all|trigger|audit) ;; *) echo "bad layer" >&2; exit 1 ;; esac
+          case "${EVAL_REPEATS}" in ''|*[!0-9]*) echo "repeats must be a positive integer" >&2; exit 1 ;; esac
+          node scripts/run-eval.mjs \
+            --layer "${EVAL_LAYER}" \
+            --repeats "${EVAL_REPEATS}" \
+            --out "${RUNNER_TEMP}/eval-summary.json"
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f "${RUNNER_TEMP}/eval-summary.json" ]; then
+            {
+              echo '```json'
+              cat "${RUNNER_TEMP}/eval-summary.json"
+              echo '```'
+            } >> "${GITHUB_STEP_SUMMARY}"
+          fi
+
+      - name: Upload summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-summary
+          path: ${{ runner.temp }}/eval-summary.json
+          if-no-files-found: warn

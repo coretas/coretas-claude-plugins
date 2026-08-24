@@ -32,3 +32,9 @@ export const STATUSES = Object.freeze({
 
 /** `paused` is a config-only state. A rendered page cannot evidence it. */
 export const EMITTABLE_STATUSES = Object.freeze(['ok', 'missing', 'mismatched', 'not_firing'])
+
+/**
+ * Worst first. `not_firing` and `mismatched` mean something believes it is
+ * measured and it is not; `missing` may be entirely deliberate on a given page.
+ */
+export const STATUS_SEVERITY = Object.freeze(['not_firing', 'mismatched', 'missing'])
