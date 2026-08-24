@@ -1,4 +1,5 @@
 import { normalise } from '../artefact.mjs'
+import { buildCta } from '../cta.mjs'
 import { collectEvidence } from './evidence.mjs'
 import { detectConsentMode } from './signals/consent-mode.mjs'
 import { detectConversionLinker } from './signals/conversion-linker.mjs'
@@ -35,10 +36,13 @@ export function detect(input) {
 
   assertWellFormed(findings)
 
+  // After assertWellFormed, never before: buildCta rejects anything outside the
+  // vocabulary, and a validated finding set is what makes that unreachable.
   return {
     schemaVersion: 1,
     target: { url: capture?.target?.url ?? null, finalUrl: capture?.target?.finalUrl ?? null },
     findings,
+    nextStep: buildCta(findings),
   }
 }
 

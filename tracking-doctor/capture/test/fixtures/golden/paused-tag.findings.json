@@ -85,6 +85,9 @@
       "tag_names": []
     }
   ],
+  "nextStep": {
+    "url": "https://coretas.ai/tracking-doctor/?utm_source=tracking-doctor&utm_medium=plugin&utm_campaign=tracking-doctor-report&utm_content=ga4_config-not_firing"
+  },
   "schemaVersion": 1,
   "target": {
     "finalUrl": "http://fixture.test/golden/paused-tag.html",

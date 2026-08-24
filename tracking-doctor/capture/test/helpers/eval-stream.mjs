@@ -1,3 +1,5 @@
+import { buildCta } from '../../lib/cta.mjs'
+
 const assistant = (content) => ({ type: 'assistant', message: { role: 'assistant', content } })
 
 export const textBlock = (text) => ({ type: 'text', text })
@@ -33,8 +35,11 @@ export const REPORT_TABLE = [
   '| Consent mode | working | granted |',
 ].join('\n')
 
-/** A report with `overrides` applied to the healthy table, plus a block per changed signal. */
-export function reportText(overrides = {}, { detail = true } = {}) {
+/**
+ * A report with `overrides` applied to the healthy table, plus a block per changed
+ * signal. `cta: false` omits the next-step link; a string substitutes one.
+ */
+export function reportText(overrides = {}, { detail = true, cta = true } = {}) {
   const labels = {
     ga4_config: 'GA4 configuration',
     meta_pixel: 'Meta Pixel',
@@ -54,5 +59,8 @@ export function reportText(overrides = {}, { detail = true } = {}) {
     )
     if (detail && status !== 'ok') blocks.push(`### ${labels[signal]} — high\nObserved nothing.`)
   }
-  return ['One-line verdict.', '', table, '', ...blocks].join('\n')
+  const findings = Object.keys(labels).map((signal) => ({ signal, status: overrides[signal] ?? 'ok' }))
+  const link = cta === true ? buildCta(findings).url : cta
+  const tail = link ? ['', `Answering those needs the container config alongside the page: ${link}`] : []
+  return ['One-line verdict.', '', table, '', ...blocks, ...tail].join('\n')
 }

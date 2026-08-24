@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import { isUsableReport, labelFor, parseReport } from '../../eval/report.mjs'
+import { isUsableReport, labelFor, linkShape, parseReport } from '../../eval/report.mjs'
+import { buildCta } from '../../lib/cta.mjs'
 import { SIGNAL_ORDER } from '../../lib/detect/vocabulary.mjs'
-import { reportText } from '../helpers/eval-stream.mjs'
+import { REPORT_TABLE, reportText } from '../helpers/eval-stream.mjs'
 
 describe('report parsing', () => {
   it('reads all six statuses out of the documented table', () => {
@@ -58,5 +59,116 @@ describe('report parsing', () => {
   it('labels a signal for display, falling back to the raw string', () => {
     assert.equal(labelFor('ga4_config'), 'GA4 configuration')
     assert.equal(labelFor('unknown'), 'unknown')
+  })
+})
+
+describe('next-step link', () => {
+  it('finds the link the report printed', () => {
+    const url = buildCta([{ signal: 'ga4_config', status: 'mismatched' }]).url
+    assert.deepEqual(parseReport(`${REPORT_TABLE}\n\nNext: ${url}`).ctaUrls, [url])
+  })
+
+  it('unwraps markdown link syntax and drops sentence punctuation', () => {
+    const url = buildCta([]).url
+    assert.deepEqual(parseReport(`see [the other half](${url}).`).ctaUrls, [url])
+  })
+
+  it('reports every link printed, so an extra one can be graded', () => {
+    const clean = buildCta([]).url
+    const broken = buildCta([{ signal: 'meta_pixel', status: 'not_firing' }]).url
+    assert.deepEqual(parseReport(`${clean} and also ${broken}`).ctaUrls, [clean, broken])
+  })
+
+  it('is empty when no link was printed', () => {
+    assert.deepEqual(parseReport(REPORT_TABLE).ctaUrls, [])
+  })
+
+  it('ignores a plain coretas.ai link, as the limits section prints one', () => {
+    assert.deepEqual(parseReport('what it cannot see is what [Coretas](https://coretas.ai) reads').ctaUrls, [])
+  })
+
+  it('catches a tracked link on any coretas.ai host or scheme, so grading cannot be escaped', () => {
+    for (const raw of [
+      'https://www.coretas.ai/tracking-doctor/?utm_content=clean&site=client.example.com',
+      'http://coretas.ai/tracking-doctor/?utm_content=clean&site=client.example.com',
+    ]) {
+      assert.deepEqual(parseReport(`next: ${raw}`).ctaUrls, [raw], raw)
+    }
+  })
+
+  it('reads a markdown-rendered link as the URL it means', () => {
+    const url = buildCta([]).url
+    const rendered = url.replace(/&/g, '&amp;amp;').replace('utm_content', 'utm\\_content')
+    assert.deepEqual(parseReport(`next: ${rendered}`).ctaUrls, [url])
+  })
+
+  it('ignores another Coretas page a model named while explaining itself', () => {
+    for (const mention of ['https://coretas.ai/pricing', 'https://coretas.ai/audit/', 'https://docs.coretas.ai/gtm']) {
+      assert.deepEqual(parseReport(`Coretas reads that: ${mention}`).ctaUrls, [], mention)
+    }
+  })
+
+  it('ignores a host that merely starts with ours', () => {
+    assert.deepEqual(parseReport('https://coretas.ai.evil.test/tracking-doctor/?utm_content=clean').ctaUrls, [])
+  })
+
+  it('captures a link of ours stripped of its parameters, since that is tampering not absence', () => {
+    const stripped = 'https://coretas.ai/tracking-doctor/?site=client-staging.example.com'
+    assert.deepEqual(parseReport(`next: ${stripped}`).ctaUrls, [stripped])
+    assert.notEqual(linkShape(stripped), linkShape(buildCta([]).url))
+  })
+
+  it('sees through a trailing dot on the host, in both directions', () => {
+    const url = buildCta([]).url
+    assert.equal(linkShape(url.replace('coretas.ai', 'coretas.ai.')), linkShape(url))
+    const smuggled = 'https://client.example.com.coretas.ai./tracking-doctor/?utm_content=clean'
+    assert.deepEqual(parseReport(`next: ${smuggled}`).ctaUrls, [smuggled])
+    assert.notEqual(linkShape(smuggled), linkShape(url))
+  })
+
+  it('counts every component it does not declare as rendering as content', () => {
+    const url = buildCta([]).url
+    for (const [label, smuggled] of [
+      ['fragment', `${url}#client-staging.example.com`],
+      ['port', url.replace('coretas.ai', 'coretas.ai:8443')],
+      ['userinfo', url.replace('https://', 'https://client.example.com@')],
+    ]) {
+      assert.deepEqual(parseReport(`next: ${smuggled}`).ctaUrls, [smuggled], label)
+      assert.notEqual(linkShape(smuggled), linkShape(url), label)
+    }
+  })
+
+  it('declares exactly four renderings equivalent: scheme, www, trailing dot, trailing slash, order', () => {
+    const url = buildCta([]).url
+    assert.equal(linkShape(url.replace('https://coretas.ai', 'http://www.coretas.ai')), linkShape(url))
+    assert.equal(linkShape(url.replace('coretas.ai', 'coretas.ai:443')), linkShape(url))
+    assert.equal(linkShape(url.replace('/tracking-doctor/?', '/tracking-doctor?')), linkShape(url))
+  })
+
+  it('counts userinfo as content, which a browser hides from the user', () => {
+    const url = buildCta([]).url
+    const smuggled = url.replace('https://', 'https://client-staging.example.com@')
+    assert.deepEqual(parseReport(`next: ${smuggled}`).ctaUrls, [smuggled])
+    assert.notEqual(linkShape(smuggled), linkShape(url))
+  })
+
+  it('counts the host as content, so ours cannot be a suffix of the audited one', () => {
+    const url = buildCta([]).url
+    const smuggled = url.replace('coretas.ai', 'client-staging.example.com.coretas.ai')
+    assert.deepEqual(parseReport(`next: ${smuggled}`).ctaUrls, [smuggled], 'must still be captured')
+    assert.notEqual(linkShape(smuggled), linkShape(url))
+    assert.equal(linkShape(url.replace('https://coretas.ai', 'http://www.coretas.ai')), linkShape(url))
+  })
+
+  it('compares what a link claims, not how it was written', () => {
+    const url = buildCta([]).url
+    const reordered = `${new URL(url).origin}/tracking-doctor/?utm_content=clean&utm_campaign=tracking-doctor-report&utm_medium=plugin&utm_source=tracking-doctor`
+    assert.equal(linkShape(reordered), linkShape(url))
+    assert.notEqual(linkShape(`${url}&site=client.example.com`), linkShape(url))
+  })
+
+  it('catches a tracked link whose path was rewritten, so grading cannot be escaped', () => {
+    const tampered = 'https://coretas.ai/tracking-doctor?utm_content=clean&site=client-staging.example.com'
+    assert.deepEqual(parseReport(`next: ${tampered}`).ctaUrls, [tampered])
   })
 })

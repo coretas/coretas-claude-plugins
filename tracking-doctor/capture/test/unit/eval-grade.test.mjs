@@ -3,6 +3,7 @@ import { describe, it } from 'node:test'
 
 import { gradeAudit, gradeTrigger, verdict } from '../../eval/grade.mjs'
 import { parseReport } from '../../eval/report.mjs'
+import { buildCta } from '../../lib/cta.mjs'
 import { TOLERANCES } from '../../eval/tolerances.mjs'
 import { reportText } from '../helpers/eval-stream.mjs'
 
@@ -112,6 +113,8 @@ describe('audit grading', () => {
       missedSoft: 0,
       falsePositives: 0,
       wrongStatus: 0,
+      missingCta: 0,
+      editedCta: 0,
       unusable: 0,
     })
   })
@@ -230,5 +233,82 @@ describe('verdict', () => {
     const combined = verdict([clean, dirty])
     assert.equal(combined.passed, false)
     assert.ok(combined.violations.every((text) => text.startsWith('[audit] ')))
+  })
+})
+
+describe('next-step link grading', () => {
+  it('passes a report that printed the link detection emitted', () => {
+    const grade = gradeAudit([auditRun()])
+    assert.deepEqual(grade.violations, [])
+    assert.equal(grade.metrics.totals.missingCta, 0)
+    assert.equal(grade.metrics.totals.editedCta, 0)
+  })
+
+  it('counts a report that dropped the link, and fails once past the cap', () => {
+    const dropped = auditRun({ parsed: parseReport(reportText({}, { cta: false })) })
+    assert.deepEqual(gradeAudit([dropped]).violations, [])
+
+    const grade = gradeAudit([dropped, { ...dropped, name: 'second' }])
+    assert.equal(grade.metrics.totals.missingCta, 2)
+    assert.match(messages(grade), /2 report\(s\) with no next-step link/)
+  })
+
+  it('fails immediately on a rewritten link, naming both URLs', () => {
+    const edited = 'https://coretas.ai/tracking-doctor/?utm_content=https://client.example.com/checkout'
+    const grade = gradeAudit([auditRun({ parsed: parseReport(reportText({}, { cta: edited })) })])
+    assert.equal(grade.metrics.totals.editedCta, 1)
+    assert.match(messages(grade), /1 edited next-step link/)
+    assert.match(grade.metrics.perCase[0].editedCta[0], /client\.example\.com/)
+    assert.match(grade.metrics.perCase[0].editedCta[0], /utm_content=clean/)
+  })
+
+  it('flags a link that contradicts the table printed above it', () => {
+    const expected = { ...HEALTHY, conversion_linker: 'not_firing' }
+    const report = reportText({ conversion_linker: 'not_firing' }, { cta: buildCta([]).url })
+    const grade = gradeAudit([auditRun({ expected, parsed: parseReport(report) })])
+    assert.equal(grade.metrics.totals.editedCta, 1)
+    assert.match(grade.metrics.perCase[0].cta.expected, /utm_content=conversion_linker-not_firing/)
+  })
+
+  it('accepts a verbatim link a model rendered as markdown', () => {
+    const rendered = buildCta([]).url.replace(/&/g, '&amp;')
+    const grade = gradeAudit([auditRun({ parsed: parseReport(reportText({}, { cta: rendered })) })])
+    assert.equal(grade.metrics.totals.editedCta, 0)
+    assert.deepEqual(grade.violations, [])
+  })
+
+  it('catches a link smuggling the audited site past a rewritten host', () => {
+    const smuggled = 'https://www.coretas.ai/tracking-doctor/?utm_content=clean&site=client.example.com'
+    const grade = gradeAudit([auditRun({ parsed: parseReport(reportText({}, { cta: smuggled })) })])
+    assert.equal(grade.metrics.totals.editedCta, 1)
+    assert.match(messages(grade), /1 edited next-step link/)
+  })
+
+  it('grades a link of ours as edited however the audited site was hidden in it', () => {
+    const verbatim = buildCta([]).url
+    for (const smuggled of [
+      verbatim.replace('https://', 'https://client-staging.example.com@'),
+      'https://coretas.ai/tracking-doctor/?site=client-staging.example.com',
+      'https://client.example.com.coretas.ai./tracking-doctor/?utm_content=clean',
+    ]) {
+      const grade = gradeAudit([auditRun({ parsed: parseReport(reportText({}, { cta: smuggled })) })])
+      assert.equal(grade.metrics.totals.editedCta, 1, smuggled)
+      assert.equal(grade.metrics.totals.missingCta, 0, smuggled)
+    }
+  })
+
+  it('accepts a verbatim link when the table above it holds a false positive', () => {
+    const report = reportText({ consent_mode: 'mismatched' }, { cta: buildCta([]).url })
+    const grade = gradeAudit([auditRun({ parsed: parseReport(report) })])
+    assert.equal(grade.metrics.totals.editedCta, 0)
+    assert.equal(grade.metrics.totals.falsePositives, 1)
+    assert.deepEqual(grade.violations, [])
+  })
+
+  it('does not double-count a misreported signal as an edited link', () => {
+    const expected = { ...HEALTHY, conversion_linker: 'not_firing' }
+    const grade = gradeAudit([auditRun({ expected, parsed: parseReport(reportText()) })])
+    assert.equal(grade.metrics.totals.editedCta, 0)
+    assert.equal(grade.metrics.totals.missedCritical, 1)
   })
 })

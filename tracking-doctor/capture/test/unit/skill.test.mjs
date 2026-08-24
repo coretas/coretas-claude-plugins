@@ -26,6 +26,15 @@ function parseFrontmatter(text) {
   return { frontmatter, body }
 }
 
+/** The fenced template under "## Report format" — where the model reads its output shape. */
+function reportFormatBlock(text) {
+  const section = text.split('## Report format')[1]
+  assert.ok(section, 'SKILL.md must have a "## Report format" section')
+  const fenced = /```\n([\s\S]*?)```/.exec(section)
+  assert.ok(fenced, 'the Report format section must contain a fenced template')
+  return fenced[1]
+}
+
 describe('SKILL.md', () => {
   it('exists and parses as frontmatter + body', async () => {
     const text = await readFile(SKILL_PATH, 'utf8')
@@ -114,6 +123,16 @@ describe('SKILL.md', () => {
     const text = await readFile(SKILL_PATH, 'utf8')
     assert.ok(text.includes('npm ci'))
     assert.ok(text.includes('node --version'))
+  })
+
+  it('tells the model to print nextStep.url verbatim, and hardcodes no landing URL of its own', async () => {
+    const text = await readFile(SKILL_PATH, 'utf8')
+    assert.ok(reportFormatBlock(text).includes('<nextStep.url>'), 'the report template must show where the link goes')
+    assert.ok(/verbatim/i.test(text))
+    assert.ok(
+      !/https:\/\/coretas\.ai\/[a-z-]+\/\?/.test(text),
+      'SKILL.md must not carry a built link of its own — the model would copy that instead'
+    )
   })
 
   it('never reports "paused" as an emittable status', async () => {
