@@ -130,7 +130,7 @@ describe('SKILL.md', () => {
     assert.ok(reportFormatBlock(text).includes('<nextStep.url>'), 'the report template must show where the link goes')
     assert.ok(/verbatim/i.test(text))
     assert.ok(
-      !/https:\/\/coretas\.ai\/[a-z-]+\/\?/.test(text),
+      !/https?:\/\/[\w.-]*coretas\.ai\/[a-z-]+\/?\?/i.test(text),
       'SKILL.md must not carry a built link of its own — the model would copy that instead'
     )
   })

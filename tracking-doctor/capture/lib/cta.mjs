@@ -5,7 +5,7 @@
  */
 import { EMITTABLE_STATUSES, SIGNAL_ORDER, STATUS_SEVERITY, STATUSES } from './detect/vocabulary.mjs'
 
-export const LANDING_URL = 'https://coretas.ai/tracking-doctor/'
+export const LANDING_URL = 'https://app.coretas.ai/tracking-doctor/'
 
 /** The cron filters on this campaign, so renaming it silently ends measurement. */
 export const CAMPAIGN = 'tracking-doctor-report'
