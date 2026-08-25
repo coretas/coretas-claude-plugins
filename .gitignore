@@ -1,3 +1,4 @@
 node_modules/
 
-
+# Internal working documents. This repository is public.
+CRM-*.md

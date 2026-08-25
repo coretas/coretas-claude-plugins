@@ -62,9 +62,15 @@ Answering those requires reading the container configuration alongside the page.
 
 ## Privacy
 
-`tracking-doctor` runs entirely on your machine. It loads the URL you give it in a local browser
-and prints the findings. **Nothing is sent to Coretas or anywhere else**, and no audit results,
-URLs, or page contents leave your machine.
+`tracking-doctor` runs on your machine: it renders the URL you give it in a local browser and
+prints the findings there. The audited URL, its domain and the page contents never leave your
+machine — nothing is uploaded, and there is no telemetry and no account.
+
+The report ends with **one link to `app.coretas.ai`**. It carries `utm_source`, `utm_medium` and
+`utm_campaign`, fixed strings naming this plugin, plus `utm_content`, which holds the single worst
+finding as a signal and a status — `conversion_linker` and `not_firing`, say. Both come from a
+closed vocabulary, so the site you audited cannot appear in the link. **Nothing is transmitted
+unless you choose to click it.**
 
 If this ever changes, it will be stated here in the same change that makes it true.
 
