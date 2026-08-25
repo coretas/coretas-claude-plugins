@@ -94,7 +94,9 @@ describe('summary', () => {
 })
 
 describe('summary names a link failure', () => {
-  const smuggled = 'https://www.coretas.ai/tracking-doctor/?utm_content=clean&site=client.example.com'
+  const smuggled =
+    'https://www.app.coretas.ai/tracking-doctor/?utm_source=tracking-doctor&utm_medium=plugin' +
+    '&utm_campaign=tracking-doctor-report&utm_content=clean&site=client.example.com'
 
   it('renders the two link counts in the totals line', () => {
     const text = renderSummary(summaryOf([auditWith(parseReport(reportText({}, { cta: smuggled })))]))

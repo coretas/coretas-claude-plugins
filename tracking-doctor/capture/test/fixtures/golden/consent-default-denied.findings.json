@@ -117,7 +117,7 @@
     }
   ],
   "nextStep": {
-    "url": "https://coretas.ai/tracking-doctor/?utm_source=tracking-doctor&utm_medium=plugin&utm_campaign=tracking-doctor-report&utm_content=consent_mode-mismatched"
+    "url": "https://app.coretas.ai/tracking-doctor/?utm_source=tracking-doctor&utm_medium=plugin&utm_campaign=tracking-doctor-report&utm_content=consent_mode-mismatched"
   },
   "schemaVersion": 1,
   "target": {

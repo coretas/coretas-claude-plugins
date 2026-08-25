@@ -83,6 +83,12 @@ describe('ctaContent', () => {
 })
 
 describe('buildCta carries nothing but vocabulary', () => {
+  // Literal on purpose: a test that reads LANDING_URL pins nothing about where the link goes.
+  it('points at the landing page on app.coretas.ai', () => {
+    assert.equal(LANDING_URL, 'https://app.coretas.ai/tracking-doctor/')
+    assert.ok(buildCta(ALL_OK).url.startsWith('https://app.coretas.ai/tracking-doctor/?'))
+  })
+
   it('emits exactly the four utm parameters, in a fixed order', () => {
     const { searchParams } = new URL(buildCta(ALL_OK).url)
     assert.deepEqual([...searchParams.keys()], ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'])

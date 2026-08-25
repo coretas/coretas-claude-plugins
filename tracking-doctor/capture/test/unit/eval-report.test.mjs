@@ -62,6 +62,13 @@ describe('report parsing', () => {
   })
 })
 
+// A host rewrite that matched nothing would compare a URL with itself and pass.
+function rewrite(url, from, to) {
+  const variant = url.replace(from, to)
+  assert.notEqual(variant, url, `rewriting "${from}" matched nothing`)
+  return variant
+}
+
 describe('next-step link', () => {
   it('finds the link the report printed', () => {
     const url = buildCta([{ signal: 'ga4_config', status: 'mismatched' }]).url
@@ -113,14 +120,14 @@ describe('next-step link', () => {
   })
 
   it('captures a link of ours stripped of its parameters, since that is tampering not absence', () => {
-    const stripped = 'https://coretas.ai/tracking-doctor/?site=client-staging.example.com'
+    const stripped = 'https://app.coretas.ai/tracking-doctor/?site=client-staging.example.com'
     assert.deepEqual(parseReport(`next: ${stripped}`).ctaUrls, [stripped])
     assert.notEqual(linkShape(stripped), linkShape(buildCta([]).url))
   })
 
   it('sees through a trailing dot on the host, in both directions', () => {
     const url = buildCta([]).url
-    assert.equal(linkShape(url.replace('coretas.ai', 'coretas.ai.')), linkShape(url))
+    assert.equal(linkShape(rewrite(url, 'app.coretas.ai', 'app.coretas.ai.')), linkShape(url))
     const smuggled = 'https://client.example.com.coretas.ai./tracking-doctor/?utm_content=clean'
     assert.deepEqual(parseReport(`next: ${smuggled}`).ctaUrls, [smuggled])
     assert.notEqual(linkShape(smuggled), linkShape(url))
@@ -130,8 +137,8 @@ describe('next-step link', () => {
     const url = buildCta([]).url
     for (const [label, smuggled] of [
       ['fragment', `${url}#client-staging.example.com`],
-      ['port', url.replace('coretas.ai', 'coretas.ai:8443')],
-      ['userinfo', url.replace('https://', 'https://client.example.com@')],
+      ['port', rewrite(url, 'app.coretas.ai', 'app.coretas.ai:8443')],
+      ['userinfo', rewrite(url, 'https://', 'https://client.example.com@')],
     ]) {
       assert.deepEqual(parseReport(`next: ${smuggled}`).ctaUrls, [smuggled], label)
       assert.notEqual(linkShape(smuggled), linkShape(url), label)
@@ -140,24 +147,24 @@ describe('next-step link', () => {
 
   it('declares exactly four renderings equivalent: scheme, www, trailing dot, trailing slash, order', () => {
     const url = buildCta([]).url
-    assert.equal(linkShape(url.replace('https://coretas.ai', 'http://www.coretas.ai')), linkShape(url))
-    assert.equal(linkShape(url.replace('coretas.ai', 'coretas.ai:443')), linkShape(url))
-    assert.equal(linkShape(url.replace('/tracking-doctor/?', '/tracking-doctor?')), linkShape(url))
+    assert.equal(linkShape(rewrite(url, 'https://app.coretas.ai', 'http://www.app.coretas.ai')), linkShape(url))
+    assert.equal(linkShape(rewrite(url, 'app.coretas.ai', 'app.coretas.ai:443')), linkShape(url))
+    assert.equal(linkShape(rewrite(url, '/tracking-doctor/?', '/tracking-doctor?')), linkShape(url))
   })
 
   it('counts userinfo as content, which a browser hides from the user', () => {
     const url = buildCta([]).url
-    const smuggled = url.replace('https://', 'https://client-staging.example.com@')
+    const smuggled = rewrite(url, 'https://', 'https://client-staging.example.com@')
     assert.deepEqual(parseReport(`next: ${smuggled}`).ctaUrls, [smuggled])
     assert.notEqual(linkShape(smuggled), linkShape(url))
   })
 
   it('counts the host as content, so ours cannot be a suffix of the audited one', () => {
     const url = buildCta([]).url
-    const smuggled = url.replace('coretas.ai', 'client-staging.example.com.coretas.ai')
+    const smuggled = rewrite(url, 'app.coretas.ai', 'client-staging.example.com.app.coretas.ai')
     assert.deepEqual(parseReport(`next: ${smuggled}`).ctaUrls, [smuggled], 'must still be captured')
     assert.notEqual(linkShape(smuggled), linkShape(url))
-    assert.equal(linkShape(url.replace('https://coretas.ai', 'http://www.coretas.ai')), linkShape(url))
+    assert.equal(linkShape(rewrite(url, 'https://app.coretas.ai', 'http://www.app.coretas.ai')), linkShape(url))
   })
 
   it('compares what a link claims, not how it was written', () => {
@@ -168,7 +175,7 @@ describe('next-step link', () => {
   })
 
   it('catches a tracked link whose path was rewritten, so grading cannot be escaped', () => {
-    const tampered = 'https://coretas.ai/tracking-doctor?utm_content=clean&site=client-staging.example.com'
+    const tampered = 'https://app.coretas.ai/tracking-doctor?utm_content=clean&site=client-staging.example.com'
     assert.deepEqual(parseReport(`next: ${tampered}`).ctaUrls, [tampered])
   })
 })
