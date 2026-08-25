@@ -254,7 +254,7 @@ describe('next-step link grading', () => {
   })
 
   it('fails immediately on a rewritten link, naming both URLs', () => {
-    const edited = 'https://coretas.ai/tracking-doctor/?utm_content=https://client.example.com/checkout'
+    const edited = 'https://app.coretas.ai/tracking-doctor/?utm_content=https://client.example.com/checkout'
     const grade = gradeAudit([auditRun({ parsed: parseReport(reportText({}, { cta: edited })) })])
     assert.equal(grade.metrics.totals.editedCta, 1)
     assert.match(messages(grade), /1 edited next-step link/)
@@ -278,7 +278,9 @@ describe('next-step link grading', () => {
   })
 
   it('catches a link smuggling the audited site past a rewritten host', () => {
-    const smuggled = 'https://www.coretas.ai/tracking-doctor/?utm_content=clean&site=client.example.com'
+    const smuggled =
+      'https://www.app.coretas.ai/tracking-doctor/?utm_source=tracking-doctor&utm_medium=plugin' +
+      '&utm_campaign=tracking-doctor-report&utm_content=clean&site=client.example.com'
     const grade = gradeAudit([auditRun({ parsed: parseReport(reportText({}, { cta: smuggled })) })])
     assert.equal(grade.metrics.totals.editedCta, 1)
     assert.match(messages(grade), /1 edited next-step link/)
@@ -288,7 +290,7 @@ describe('next-step link grading', () => {
     const verbatim = buildCta([]).url
     for (const smuggled of [
       verbatim.replace('https://', 'https://client-staging.example.com@'),
-      'https://coretas.ai/tracking-doctor/?site=client-staging.example.com',
+      'https://app.coretas.ai/tracking-doctor/?site=client-staging.example.com',
       'https://client.example.com.coretas.ai./tracking-doctor/?utm_content=clean',
     ]) {
       const grade = gradeAudit([auditRun({ parsed: parseReport(reportText({}, { cta: smuggled })) })])
