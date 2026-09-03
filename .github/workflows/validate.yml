@@ -15,6 +15,14 @@ jobs:
       - run: npm install -g @anthropic-ai/claude-code
       - run: claude plugin validate . --strict
       - run: claude plugin validate ./tracking-doctor --strict
+      - name: Prove the gate catches a broken manifest
+        run: |
+          cp -r tracking-doctor /tmp/broken-plugin
+          node -e "const fs=require('fs');const p='/tmp/broken-plugin/.claude-plugin/plugin.json';const j=JSON.parse(fs.readFileSync(p));delete j.name;fs.writeFileSync(p, JSON.stringify(j));"
+          if claude plugin validate /tmp/broken-plugin --strict; then
+            echo "::error::claude plugin validate did not fail on a manifest missing required field 'name'"
+            exit 1
+          fi
 
   capture:
     runs-on: ubuntu-latest
