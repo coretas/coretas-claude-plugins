@@ -5,20 +5,29 @@ Credential-free diagnostics for advertising measurement, packaged as Claude Code
 | Plugin | Status | What it does |
 | --- | --- | --- |
 | `tracking-doctor` | Available | Renders a page and reports what tracking actually fires |
+| `ads-auditor` | Available | Audits Google/Meta ad exports for wasted spend and ROAS blending |
 
 ## Install
 
 ```bash
-claude plugin marketplace add coretas/coretas-claude-plugins
-
+claude plugin marketplace add anthropics/claude-plugins-community
 
 claude plugin install tracking-doctor@coretas
+claude plugin install ads-auditor@coretas
+```
+
+Testing a change before it's listed there, or before a submission is accepted? Add this repo
+directly instead — see [CONTRIBUTING.md](CONTRIBUTING.md#testing-an-install-locally):
+
+```bash
+claude plugin marketplace add coretas/coretas-claude-plugins
 ```
 
 Verify what you installed:
 
 ```bash
 claude plugin details tracking-doctor
+claude plugin details ads-auditor
 ```
 
 Then ask Claude Code to audit a URL, e.g. "check what tracking fires on https://example.com". The
@@ -71,6 +80,16 @@ The report ends with one link to `app.coretas.ai`, tagged `utm_source`, `utm_med
 as `conversion_linker` and `not_firing`. **Nothing is transmitted unless you click that link.**
 
 If this ever changes, it will be stated here in the same change that makes it true.
+
+## ads-auditor
+
+Point it at a Google Ads and/or Meta Ads export (CSV or XLSX). It computes a health-check
+report — wasted spend, ROAS blending, brand vs. prospecting split, conversion-tracking gaps —
+using the same analysis Coretas's audit service runs, entirely on your machine.
+
+No upload. No account. The report states plainly that the analysis ran locally and nothing was
+transmitted, and its closing section asks for the **findings** if you want a walkthrough —
+never your raw export files.
 
 ## Contributing
 

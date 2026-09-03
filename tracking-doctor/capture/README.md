@@ -5,8 +5,9 @@ records what tracking actually fires: outbound requests with their params and PO
 `dataLayer` push sequence, and the cookies left behind.
 
 Capture and detection are two separate steps in this one package: capture **observes** the
-rendered page, and `detect` turns that observation into findings expressed in the backend's own
-vocabulary, so plugin output and a Coretas GTM audit can be compared string-for-string.
+rendered page, and `detect` turns that observation into findings expressed in the same
+vocabulary Coretas's own GTM audit uses, so plugin output and a Coretas audit can be compared
+string-for-string.
 
 This package is the engine behind the `tracking-doctor` skill
 (`../skills/tracking-doctor/SKILL.md`), which is what an end user actually talks to. It runs this
@@ -71,9 +72,9 @@ all `conversion_linker` needs.
 
 ## Findings
 
-`detect` turns a capture into six findings, one per signal, in the vocabulary the Coretas backend
-uses for a GTM container audit (`app/services/gtm/enums.py`) — so plugin output and a backend audit
-can be compared string-for-string.
+`detect` turns a capture into six findings, one per signal, in the same vocabulary Coretas's own
+GTM container audit uses — so plugin output and a Coretas audit can be compared
+string-for-string.
 
 ```bash
 node capture.mjs detect /tmp/tracking-doctor/artefact.json
@@ -95,10 +96,10 @@ The six signals, always present and always in this order: `ga4_config`, `meta_pi
 `status` is one of `ok`, `missing`, `mismatched`, `not_firing` — `paused` is part of the shared
 vocabulary but describes a container-config state a rendered page cannot show, so this plugin never
 emits it. `tag_names` is always `[]`: the plugin observes the page, not the tag manager, so it has
-no tag names to report; the field exists for comparability with the backend's output.
+no tag names to report; the field exists for comparability with Coretas's own audit output.
 
-These strings are the backend's own names, not labels this plugin invented — renaming one breaks
-the string-for-string comparison that is the reason this JSON exists.
+These strings are Coretas's own names, not labels this plugin invented — renaming one breaks the
+string-for-string comparison that is the reason this JSON exists.
 
 ## Consent phases
 

@@ -26,7 +26,7 @@ def test_read_raw_export_xlsx_content_type(tmp_path: Path) -> None:
 
 def test_read_raw_export_missing_file_raises() -> None:
     with pytest.raises(AuditRunError, match="not found"):
-        read_raw_export(Path("/tmp/does-not-exist-crm-1929.csv"))
+        read_raw_export(Path("/tmp/does-not-exist-ads-auditor.csv"))
 
 
 def test_run_audit_missing_google_and_meta_raises() -> None:
