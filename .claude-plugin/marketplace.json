@@ -19,6 +19,16 @@
       "license": "MIT",
       "keywords": ["analytics", "tracking", "gtm", "ga4", "consent-mode", "audit"],
       "category": "monitoring"
+    },
+    {
+      "name": "ads-auditor",
+      "source": "./ads-auditor",
+      "description": "Audit Google Ads and Meta Ads exports for wasted spend, ROAS blending and conversion-tracking gaps. Runs entirely on your machine.",
+      "author": { "name": "Coretas", "email": "info@coretas.ai" },
+      "homepage": "https://github.com/coretas/coretas-claude-plugins",
+      "license": "MIT",
+      "keywords": ["advertising", "google-ads", "meta-ads", "roas", "audit"],
+      "category": "analytics"
     }
   ]
 }
