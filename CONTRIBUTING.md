@@ -52,6 +52,28 @@ asserts the token/byte budget below and that the reference filenames track
 `lib/detect/vocabulary.mjs`, so a renamed signal fails the build instead of silently orphaning a
 remediation file.
 
+## Testing the audit harness
+
+`ads-auditor/audit` is a Python package with its own suite — the one plugin here that isn't
+Node:
+
+```bash
+cd ads-auditor/audit
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt pytest ruff
+.venv/bin/pytest -q
+.venv/bin/ruff check . && .venv/bin/ruff format --check .
+```
+
+`audit/vendor/` is a byte-identical copy of framework-free modules from the `backend` repo
+(`analysis_core`, its `app.core.metrics`/`app.core.enums` dependencies, and the pure half of
+`audit_intake`) — never hand-edit it. Refresh it with `python3 scripts/sync_vendor.py
+--backend-root /path/to/backend`, which stamps `vendor/VENDORED_FROM` with the backend commit
+the snapshot came from. `tests/test_vendor_import_boundary.py` and
+`tests/test_no_network_imports.py` pin that the vendored tree and `run_audit.py` together never
+import anything beyond stdlib, `openpyxl`/`dateutil`, and the package's own modules — no
+FastAPI, no DB driver, nothing network-capable.
+
 ## Golden fixtures
 
 `test/fixtures/golden/` holds one HTML page per deliberate defect, plus a `healthy` page with
