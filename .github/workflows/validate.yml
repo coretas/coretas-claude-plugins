@@ -55,3 +55,18 @@ jobs:
           # suite here means something is wrong with browser resolution rather
           # than with the machine. Fail instead of reporting green on nothing.
           TRACKING_DOCTOR_REQUIRE_BROWSER: '1'
+
+  audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ads-auditor/audit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest ruff
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: pytest -q

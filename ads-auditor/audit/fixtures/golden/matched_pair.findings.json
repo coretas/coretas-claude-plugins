@@ -1,0 +1,301 @@
+{
+  "sections": [
+    {
+      "title": "What We Received",
+      "status": "computed",
+      "payload": {
+        "brand": "Acme",
+        "website": "acme.example",
+        "currency": "USD",
+        "store_revenue_provided": true,
+        "platforms": [
+          {
+            "platform": "google",
+            "received": true,
+            "rows_parsed": 2,
+            "date_range": {
+              "start": "2026-08-01",
+              "end": "2026-08-31"
+            }
+          },
+          {
+            "platform": "meta",
+            "received": true,
+            "rows_parsed": 2,
+            "date_range": {
+              "start": "2026-08-01",
+              "end": "2026-08-31"
+            }
+          }
+        ],
+        "data_source_disclaimer": "Nothing in this report is based on account access. Everything below is derived from the files listed above.",
+        "what_could_not_be_checked": [
+          "Meta account structure and settings",
+          "tracking implementation",
+          "anything outside the date range"
+        ]
+      },
+      "skip_reason": null
+    },
+    {
+      "title": "Claimed vs. Actual",
+      "status": "computed",
+      "payload": {
+        "combined_claim": "19800.00",
+        "store_revenue": "5000",
+        "gap": "14800.00",
+        "gap_pct": "2.96",
+        "label": "measurement gap",
+        "candidate_causes": [
+          "Revenue definitions: the two platforms count different underlying events before any overlap is considered (see the revenue-definitions footnote in Section 4).",
+          "Platform overlap: the same purchase can be counted by more than one platform.",
+          "View-through attribution: a platform can credit itself for a purchase the customer never clicked into.",
+          "Refunds: a platform's claimed figure may not reflect a refund the store already recorded.",
+          "Duplicate events: the same purchase firing more than once on a platform's side.",
+          "Date assignment: a platform can assign a conversion to a different day than the store recorded the sale."
+        ]
+      },
+      "skip_reason": null
+    },
+    {
+      "title": "ROAS Decomposition and Brand Classification",
+      "status": "computed",
+      "payload": {
+        "blended": {
+          "true_blended_roas": "0.7936507936507936507936507937",
+          "true_blended_label": "true blended, based on your store revenue",
+          "platform_attributed_blended_roas": "3.142857142857142857142857143",
+          "platform_attributed_blended_label": "platform-attributed blended, based on what the platforms claim",
+          "blended_difference": "-2.349206349206349206349206349"
+        },
+        "brand_roas": {
+          "confidence": "low",
+          "message": "brand split could not be determined reliably from campaign naming"
+        },
+        "prospecting_roas": {
+          "google": {
+            "spend": "2500.00",
+            "conversion_value": "7500.00",
+            "roas": "3"
+          },
+          "meta": {
+            "spend": "3000.00",
+            "conversion_value": "11100.00",
+            "roas": "3.7"
+          }
+        },
+        "closing_line": "The blended figure contains both. Read 3b as the cost of collecting demand that already exists, and 3c as the cost of creating demand that does not."
+      },
+      "skip_reason": null
+    },
+    {
+      "title": "KPI Table and Top Campaigns",
+      "status": "computed",
+      "payload": {
+        "platforms": {
+          "google": {
+            "received": true,
+            "kpis": {
+              "spend": "3300.00",
+              "impressions": "60000",
+              "clicks": "700",
+              "ctr": "1.166666666666666666666666667",
+              "cpc": "4.714285714285714285714285714",
+              "conversions": "30",
+              "conversion_value": "8700.00",
+              "roas": "2.636363636363636363636363636",
+              "cpa": "110.00"
+            }
+          },
+          "meta": {
+            "received": true,
+            "kpis": {
+              "spend": "3000.00",
+              "impressions": "110000",
+              "clicks": "1200",
+              "ctr": "1.090909090909090909090909091",
+              "cpc": "2.50",
+              "conversions": "50",
+              "conversion_value": "11100.00",
+              "roas": "3.7",
+              "cpa": "60.00"
+            }
+          }
+        },
+        "combined": {
+          "spend": "6300.00",
+          "impressions": "170000",
+          "clicks": "1900",
+          "ctr": "1.117647058823529411764705882",
+          "cpc": "3.315789473684210526315789474",
+          "conversions": "80",
+          "conversion_value": "19800.00",
+          "roas": "3.142857142857142857142857143",
+          "cpa": "78.75"
+        },
+        "top_campaigns": [
+          {
+            "platform": "google",
+            "name": "Summer Sale",
+            "spend": "2500.00",
+            "impressions": "10000",
+            "clicks": "500",
+            "ctr": "5.00",
+            "cpc": "5.00",
+            "conversions": "25",
+            "conversion_value": "7500.00",
+            "roas": "3",
+            "cpa": "100.00"
+          },
+          {
+            "platform": "meta",
+            "name": "Retargeting",
+            "spend": "1800.00",
+            "impressions": "30000",
+            "clicks": "900",
+            "ctr": "3.00",
+            "cpc": "2.00",
+            "conversions": "40",
+            "conversion_value": "9600.00",
+            "roas": "5.333333333333333333333333333",
+            "cpa": "45.00"
+          },
+          {
+            "platform": "meta",
+            "name": "Prospecting",
+            "spend": "1200.00",
+            "impressions": "80000",
+            "clicks": "300",
+            "ctr": "0.37500",
+            "cpc": "4.00",
+            "conversions": "10",
+            "conversion_value": "1500.00",
+            "roas": "1.25",
+            "cpa": "120.00"
+          },
+          {
+            "platform": "google",
+            "name": "Brand Awareness",
+            "spend": "800.00",
+            "impressions": "50000",
+            "clicks": "200",
+            "ctr": "0.400",
+            "cpc": "4.00",
+            "conversions": "5",
+            "conversion_value": "1200.00",
+            "roas": "1.5",
+            "cpa": "160.00"
+          }
+        ],
+        "definitions_footnote": "Google conversions: the \"Conversions\" column. Meta conversions: the \"results\" column. CTR, average CPC, ROAS and cost per conversion are computed here, never read from an export column."
+      },
+      "skip_reason": null
+    },
+    {
+      "title": "Automated Flags",
+      "status": "computed",
+      "payload": {
+        "flags": [
+          {
+            "flag_id": "flag.spend_concentration",
+            "severity": "warning",
+            "platform": "google",
+            "finding": "'Summer Sale' accounts for 76% of Google spend, above the 50% concentration threshold.",
+            "implication": "Most of the account's performance is riding on a single campaign, so the rest of the account can't be judged independently of it.",
+            "action": "Review whether this concentration is a deliberate bet or an unmanaged default, and consider diversifying spend.",
+            "metadata": {
+              "campaign": "Summer Sale",
+              "share": "0.7575757575757575757575757576"
+            }
+          },
+          {
+            "flag_id": "flag.spend_concentration",
+            "severity": "warning",
+            "platform": "meta",
+            "finding": "'Retargeting' accounts for 60% of Meta spend, at or above the 50% concentration threshold.",
+            "implication": "Most of the account's performance is riding on a single campaign, so the rest of the account can't be judged independently of it.",
+            "action": "Review whether this concentration is a deliberate bet or an unmanaged default, and consider diversifying spend.",
+            "metadata": {
+              "campaign": "Retargeting",
+              "share": "0.6"
+            }
+          },
+          {
+            "flag_id": "flag.ctr_outlier",
+            "severity": "warning",
+            "platform": "google",
+            "finding": "1 campaign(s) on Google have CTR below 25% of the platform median despite meaningful spend: Brand Awareness.",
+            "implication": "Low CTR at real spend usually points to weak creative or mistargeting relative to the rest of the account.",
+            "action": "Review ad creative and targeting for these campaigns.",
+            "metadata": {
+              "campaigns": [
+                "Brand Awareness"
+              ]
+            }
+          },
+          {
+            "flag_id": "flag.ctr_outlier",
+            "severity": "warning",
+            "platform": "meta",
+            "finding": "1 campaign(s) on Meta have CTR below 25% of the platform median despite meaningful spend: Prospecting.",
+            "implication": "Low CTR at real spend usually points to weak creative or mistargeting relative to the rest of the account.",
+            "action": "Review ad creative and targeting for these campaigns.",
+            "metadata": {
+              "campaigns": [
+                "Prospecting"
+              ]
+            }
+          },
+          {
+            "flag_id": "flag.cross_platform_absence",
+            "severity": "info",
+            "platform": null,
+            "finding": "4 campaign-name token(s) appear only on Google and 2 only on Meta, with no match on the other platform (best-effort, based on campaign naming).",
+            "implication": "This may mean a theme is only running on one platform, or simply that naming diverged between them -- it is a naming signal, not a structural finding.",
+            "action": "Confirm with the account owner whether these themes are intentionally single-platform.",
+            "metadata": {
+              "google_only": [
+                "awareness",
+                "brand",
+                "sale",
+                "summer"
+              ],
+              "meta_only": [
+                "prospecting",
+                "retargeting"
+              ]
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "flag_id": "flag.brand_dominance",
+            "message": "brand split could not be determined reliably from campaign naming"
+          }
+        ]
+      },
+      "skip_reason": null
+    },
+    {
+      "title": "What Continuous Measurement Adds",
+      "status": "computed",
+      "payload": {
+        "framing_line": "This report is one snapshot, over one date range, built from the files above. Everything Section 1 could not check is exactly what continuous, reconciled measurement would remove.",
+        "what_could_not_be_checked": [
+          "Meta account structure and settings",
+          "tracking implementation",
+          "anything outside the date range"
+        ],
+        "unavailable_cross_platform_sections": [],
+        "what_continuous_measurement_adds": [
+          "Continuous monitoring in place of a single date-range snapshot",
+          "Reconciled cross-platform figures in place of a one-time comparison",
+          "Tracking-implementation checks that an export alone cannot answer",
+          "Goal drift caught as it happens, not read after the fact"
+        ],
+        "call_to_action": "This ran entirely on your machine, so there is nothing further to send us about your ad accounts. If a finding above is worth a second pair of eyes, share this report -- not your export files -- and we can walk through it together."
+      },
+      "skip_reason": null
+    }
+  ]
+}
