@@ -1,7 +1,7 @@
 /**
- * Source of truth: backend app/services/gtm/enums.py (GtmSignal, GtmFindingStatus).
- * These strings are an interface, not labels. Changing one breaks comparability
- * with Coretas audit output, which is the entire point of emitting them.
+ * Source of truth: Coretas's own GTM signal/status vocabulary. These strings are an
+ * interface, not labels. Changing one breaks comparability with Coretas audit output,
+ * which is the entire point of emitting them.
  */
 export const SIGNALS = Object.freeze({
   ga4Config: 'ga4_config',
@@ -12,7 +12,7 @@ export const SIGNALS = Object.freeze({
   consentMode: 'consent_mode',
 })
 
-/** Declaration order in the backend enum, which is also report order. */
+/** Declaration order in Coretas's own vocabulary, which is also report order. */
 export const SIGNAL_ORDER = Object.freeze([
   'ga4_config',
   'meta_pixel',

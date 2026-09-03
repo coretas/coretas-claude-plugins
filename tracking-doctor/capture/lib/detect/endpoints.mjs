@@ -1,6 +1,6 @@
 /**
  * Exact hosts and exact path rules for the signals detection reads. No
- * substring guessing on IDs, ever — that is the backend's CRM-1423 bug.
+ * substring guessing on IDs, ever — that class of matching bug has bitten before.
  */
 
 export const ID_PATTERNS = Object.freeze({

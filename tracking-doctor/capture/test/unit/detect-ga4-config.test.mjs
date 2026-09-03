@@ -8,7 +8,7 @@ import { ga4Hit, loader, makeCapture } from '../helpers/captures.mjs'
 
 const detect = (capture) => detectGa4Config(collectEvidence(capture))
 
-test('loader present, zero hits, is not_firing — not ok (CRM-1421)', () => {
+test('loader present, zero hits, is not_firing — not ok', () => {
   const capture = makeCapture({ requests: [loader({ id: 'G-ABC123' })] })
   const finding = detect(capture)
   assert.equal(finding.status, STATUSES.notFiring)

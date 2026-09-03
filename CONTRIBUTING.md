@@ -65,11 +65,10 @@ python3 -m venv .venv
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ```
 
-`audit/vendor/` is a byte-identical copy of framework-free modules from the `backend` repo
-(`analysis_core`, its `app.core.metrics`/`app.core.enums` dependencies, and the pure half of
-`audit_intake`) — never hand-edit it. Refresh it with `python3 scripts/sync_vendor.py
---backend-root /path/to/backend`, which stamps `vendor/VENDORED_FROM` with the backend commit
-the snapshot came from. `tests/test_vendor_import_boundary.py` and
+`audit/vendor/` is a synced snapshot of Coretas's internal analysis engine — never hand-edit
+it. Refresh it with `python3 scripts/sync_vendor.py --source-root <path>`, which stamps
+`vendor/VENDORED_FROM` with the source commit the snapshot came from.
+`tests/test_vendor_import_boundary.py` and
 `tests/test_no_network_imports.py` pin that the vendored tree and `run_audit.py` together never
 import anything beyond stdlib, `openpyxl`/`dateutil`, and the package's own modules — no
 FastAPI, no DB driver, nothing network-capable.
@@ -238,11 +237,6 @@ Clean up afterwards — these commands write to your real user settings:
 claude plugin uninstall tracking-doctor
 claude plugin marketplace remove coretas
 ```
-
-## Pull requests
-
-- Prefix the title with the Jira key, e.g. `CRM-1580: plugin repo and manifests`.
-- GitLab's Jira automation does not reach this repository, so Jira transitions are manual.
 
 ## Reporting a detection problem
 

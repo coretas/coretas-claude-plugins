@@ -3,7 +3,7 @@ import { test } from 'node:test'
 
 import { EMITTABLE_STATUSES, SIGNALS, SIGNAL_ORDER, STATUSES } from '../../lib/detect/vocabulary.mjs'
 
-test('SIGNAL_ORDER matches the backend enum, in declaration order', () => {
+test('SIGNAL_ORDER matches the shared vocabulary, in declaration order', () => {
   assert.deepEqual(SIGNAL_ORDER, [
     'ga4_config',
     'meta_pixel',
@@ -14,7 +14,7 @@ test('SIGNAL_ORDER matches the backend enum, in declaration order', () => {
   ])
 })
 
-test('SIGNALS values are byte-identical to the backend strings', () => {
+test('SIGNALS values are byte-identical to the shared strings', () => {
   assert.equal(SIGNALS.ga4Config, 'ga4_config')
   assert.equal(SIGNALS.metaPixel, 'meta_pixel')
   assert.equal(SIGNALS.conversionLinker, 'conversion_linker')
@@ -23,7 +23,7 @@ test('SIGNALS values are byte-identical to the backend strings', () => {
   assert.equal(SIGNALS.consentMode, 'consent_mode')
 })
 
-test('STATUSES holds all five backend status strings', () => {
+test('STATUSES holds all five shared status strings', () => {
   assert.deepEqual(Object.values(STATUSES).sort(), ['mismatched', 'missing', 'not_firing', 'ok', 'paused'].sort())
 })
 
