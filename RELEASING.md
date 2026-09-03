@@ -48,3 +48,17 @@ earlier note here claimed the opposite. Check `git status` yourself before taggi
 **The tag is annotated, so it records who cut the release.** The tagger is taken from git's
 `user.name` and `user.email` at the time it runs. This repository sets both locally; a fresh clone
 does not, so confirm `git config user.email` before tagging from one.
+
+## Releasing ads-auditor
+
+Same flow, `./ads-auditor` in place of `./tracking-doctor`: bump `version` in
+`ads-auditor/.claude-plugin/plugin.json`, validate with `claude plugin validate ./ads-auditor
+--strict`, commit, then `claude plugin tag ./ads-auditor --dry-run` and `--push -m
+"ads-auditor %s"`. Tag format is `ads-auditor--v0.1.0`.
+
+**One thing tracking-doctor's flow has no equivalent of**: `ads-auditor/audit/vendor/` is a
+copied snapshot of backend's `analysis_core`, stamped with the backend commit it came from in
+`vendor/VENDORED_FROM`. Before cutting a release, check that file against backend `develop`'s
+current `analysis_core` — a stale vendor copy means the plugin computes a different report than
+the service channel does today. Refresh it with `python3 ads-auditor/audit/scripts/sync_vendor.py
+--backend-root /path/to/backend` if it's behind.
