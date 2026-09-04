@@ -76,8 +76,9 @@ and prints the findings there. The audited URL, its domain and the page contents
 machine.
 
 The report ends with one link to `app.coretas.ai`, tagged `utm_source`, `utm_medium`,
-`utm_campaign` and `utm_content`. Only the last one varies: it names the single worst finding, such
-as `conversion_linker` and `not_firing`. **Nothing is transmitted unless you click that link.**
+`utm_campaign` and `utm_content`. Only the last one varies: it is `clean` when every
+signal is ok, or a hyphenated `signal-status` pair such as `conversion_linker-not_firing`.
+**Nothing is transmitted unless you click that link.**
 
 If this ever changes, it will be stated here in the same change that makes it true.
 
