@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The nightly harness. Reports a verdict against `eval/tolerances.mjs`; the raw
+ * The release-gated eval harness. Reports a verdict against `eval/tolerances.mjs`; the raw
  * model output goes to the JSON artefact, never to the log as the answer.
  *
  * Needs credentials for `claude -p`, so it is not part of `npm test` — the pure

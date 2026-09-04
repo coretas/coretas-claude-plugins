@@ -94,7 +94,7 @@ describe('runClaude', () => {
     assert.match(result.stderr, /Invalid API key/)
   })
 
-  it('kills a hung run and says so, instead of stalling the nightly', async () => {
+  it('kills a hung run and says so, instead of stalling the eval', async () => {
     const { spawn } = fakeSpawn('', { hang: true })
     const result = await runClaude({ prompt: 'p', tools: ['Skill'], timeoutMs: 20 }, { spawn })
     assert.equal(result.timedOut, true)

@@ -1,16 +1,16 @@
 /**
- * The thresholds the nightly run reports against, so it emits a verdict rather
- * than raw model output. A model run is not deterministic; without a stated
- * tolerance every one of these gates is either flaky or vacuous.
+ * The thresholds the release-gated eval reports against, so it emits a verdict
+ * rather than raw model output. A model run is not deterministic; without a
+ * stated tolerance every one of these gates is either flaky or vacuous.
  *
  * These are calibration seeds, not measurements. Tighten them from observed
- * nightly history — and move a threshold only with the run that justifies it.
+ * eval history — and move a threshold only with the run that justifies it.
  */
 export const TOLERANCES = Object.freeze({
   /**
    * Every realistic phrasing must load the skill in at least this share of its
-   * repeats. At the nightly default of one repeat it means every phrasing, every
-   * night; raising `--repeats` is what buys the tolerance its slack.
+   * repeats. At the default of one repeat it means every phrasing; raising
+   * `--repeats` is what buys the tolerance its slack.
    */
   minLoadRatePerPrompt: 0.8,
   /** Across all positive phrasings together. */

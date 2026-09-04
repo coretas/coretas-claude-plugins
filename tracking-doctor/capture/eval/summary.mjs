@@ -1,5 +1,5 @@
 /**
- * Renders the verdict. The nightly run exists to say pass or fail against stated
+ * Renders the verdict. The eval run exists to say pass or fail against stated
  * tolerances, so raw model output never reaches the log on its own — it goes to
  * the JSON artefact, and this is what a human reads.
  */

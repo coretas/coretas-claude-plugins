@@ -126,7 +126,7 @@ capture actually contains. That is what `eval/` covers, driven by `claude -p`.
 npm run eval -- --dry-run       # what would run, spending nothing
 npm run eval:trigger            # does the skill load on realistic phrasing
 npm run eval:audit              # does the report name the right defect
-npm run eval                    # both, the way the nightly runs it
+npm run eval                    # both, the release-gated run
 ```
 
 It needs credentials for `claude -p`, so it is **not** part of `npm test`. Everything around the
@@ -165,7 +165,7 @@ it is measured and it is not — while a missed `missing` is allowed once, becau
 may be entirely deliberate. The negative controls are judged as a *rate*, not a count: an absolute
 cap would silently tighten threefold at `--repeats 3` and punish the one knob that makes the
 measurement better. Those numbers are calibration seeds, not measurements: tighten them from
-observed nightly history, and move one only in the commit that shows why.
+observed eval history, and move one only in the commit that shows why.
 
 **A run that evaluated nothing is red.** A ratio of 0/0 is 1, so a mistyped `--only` would
 otherwise print a perfect score having called the API zero times. A selector that matches no
@@ -175,11 +175,12 @@ what already completed still reaches the summary and the artefact.
 **The plugin is loaded with `--plugin-dir`,** which is session-scoped. An install-based harness
 would test the installer as much as the skill, and would write to the developer's real settings.
 
-**Nightly.** `.github/workflows/nightly-eval.yml` runs on a schedule and on demand — never on a
-push or a pull request, since a model run costs money and fork pull requests cannot read the
-secret. It needs `ANTHROPIC_API_KEY` in the repository secrets, and fails loudly when it is
-absent: a skipped eval reporting green is the same failure as a self-skipped golden suite. The
-verdict lands in the step summary and in an `eval-summary.json` artefact.
+**Release-gated.** `npm run eval` is the live-model verdict: run it before each release, and
+whenever you want one. It is not part of push/PR CI — a model run costs money — so `.github/workflows/validate.yml`
+stays the automated gate (pure + browser goldens + `claude plugin validate`). It needs credentials
+for `claude -p`. A run that cannot authenticate must fail, not skip-green: the same rule as a
+self-skipped golden suite. The verdict is pass or fail against `eval/tolerances.mjs`, and the
+artefact is `eval-summary.json`.
 
 The result is a claim about one model. `TRACKING_DOCTOR_EVAL_MODEL` (or `--model`) pins it, and the
 summary records which one answered.
