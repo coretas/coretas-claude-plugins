@@ -1,6 +1,6 @@
 /**
  * Spawns `claude -p` and returns the parsed stream. The plugin is loaded with
- * `--plugin-dir`, which is session-scoped: a nightly run must not write to
+ * `--plugin-dir`, which is session-scoped: an eval run must not write to
  * anyone's real plugin settings, and an install-based harness would test the
  * installer as much as the skill.
  */

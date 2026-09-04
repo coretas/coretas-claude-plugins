@@ -13,15 +13,23 @@ checking that the manifests agree.
    claude plugin validate ./tracking-doctor --strict
    ```
 
-3. Commit the version bump. The tag is created at `HEAD`, so anything left uncommitted is not in
+3. Run the live-model eval (tracking-doctor only — ads-auditor has no equivalent):
+
+   ```bash
+   cd tracking-doctor/capture && npm run eval
+   ```
+
+   Needs credentials for `claude -p`. A fail is a fail: do not tag over it.
+
+4. Commit the version bump. The tag is created at `HEAD`, so anything left uncommitted is not in
    the release — and nothing stops you from tagging anyway. See the notes below.
-4. Preview the tag:
+5. Preview the tag:
 
    ```bash
    claude plugin tag ./tracking-doctor --dry-run
    ```
 
-5. Create and push it:
+6. Create and push it:
 
    ```bash
    claude plugin tag ./tracking-doctor --push -m "tracking-doctor %s"

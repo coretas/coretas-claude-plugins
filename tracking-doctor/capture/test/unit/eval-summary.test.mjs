@@ -46,7 +46,7 @@ describe('summary', () => {
     assert.equal(exitCodeFor(summaryOf([auditWith(parseReport('nothing'))])), 1)
   })
 
-  // The nightly log has to say pass or fail, not print the model's prose and
+  // The eval log has to say pass or fail, not print the model's prose and
   // leave the reader to judge it.
   it('renders a verdict, per-layer numbers and every violation', () => {
     const rendered = renderSummary(

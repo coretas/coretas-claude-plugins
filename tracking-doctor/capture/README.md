@@ -151,7 +151,7 @@ npm run smoke:sites         # the curated real-site list, before a release
 ```
 
 The audit layer reads the committed golden captures rather than rendering anything, so it needs no
-browser and no network. `CONTRIBUTING.md` has the layers, the tolerances and the nightly workflow.
+browser and no network. `CONTRIBUTING.md` has the layers, the tolerances and the release-gated run.
 
 ## Limits
 

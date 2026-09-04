@@ -14,7 +14,7 @@ test('parseArgs runs both layers once by default', () => {
   assert.deepEqual(args.only, [])
 })
 
-test('parseArgs reads the flags the nightly workflow passes', () => {
+test('parseArgs reads the flags the release-gated eval accepts', () => {
   const args = parseArgs(['--layer', 'trigger', '--repeats', '3', '--model', 'opus', '--out', '/tmp/e.json'])
   assert.equal(args.layer, 'trigger')
   assert.equal(args.repeats, 3)
