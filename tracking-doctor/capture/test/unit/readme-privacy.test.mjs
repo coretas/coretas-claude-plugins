@@ -32,10 +32,23 @@ describe('README discloses the one link the report prints', () => {
     const section = await privacySection()
     assert.match(section, /link/i)
     assert.ok(
-      SIGNAL_ORDER.some((signal) => section.includes(`\`${signal}\``)),
+      SIGNAL_ORDER.some(
+        (signal) => section.includes(`\`${signal}\``) || section.includes(`\`${signal}-`),
+      ),
       '§Privacy must name a signal, so a reader knows what the query string holds'
     )
-    assert.ok(NON_OK.some((status) => section.includes(`\`${status}\``)), '§Privacy must name a status')
+    assert.ok(
+      NON_OK.some(
+        (status) => section.includes(`\`${status}\``) || section.includes(`-${status}\``),
+      ),
+      '§Privacy must name a status',
+    )
+    assert.match(
+      section,
+      /`[a-z_]+-[a-z_]+`/,
+      '§Privacy must show utm_content as a hyphenated signal-status token, not two separate words'
+    )
+    assert.ok(section.includes('`clean`'), '§Privacy must name the all-ok utm_content token')
   })
 
   // The claim this pins is the one the first correction of §Privacy got wrong: it described
