@@ -90,7 +90,8 @@ test('a dropped finding is caught', () => {
   regressed.findings.pop()
 
   const differences = diffGolden(regressed, baseline)
-  assert.ok(differences.some((line) => line.includes('has 5 item(s), golden has 6')))
+  const count = baseline.findings.length
+  assert.ok(differences.some((line) => line.includes(`has ${count - 1} item(s), golden has ${count}`)))
 })
 
 test('a removed observed_values key is caught as absent, not silently equal', () => {

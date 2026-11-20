@@ -24,6 +24,7 @@
 </script>
 <script src="https://www.googletagmanager.com/gtag/js?id=G-DUP1"></script>
 <script src="https://connect.facebook.net/en_US/fbevents.js"></script>
+<script src="https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=CTIKTOKPIXEL00000001&lib=ttq"></script>
 </head>
 <body>
 <h1>duplicate gtag</h1>
@@ -34,6 +35,8 @@
   new Image().src = ga4 + 'sign_up';
   new Image().src = 'https://www.facebook.com/tr?id=1112223334445&ev=PageView';
   new Image().src = 'https://www.googleadservices.com/pagead/conversion/123456789/?label=abc123';
+  navigator.sendBeacon('https://analytics.tiktok.com/api/v2/pixel',
+    JSON.stringify({ event: 'Pageview', context: { pixel: { code: 'CTIKTOKPIXEL00000001' } } }));
 </script>
 </body>
 </html>

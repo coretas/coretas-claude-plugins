@@ -6,6 +6,7 @@
 export const SIGNALS = Object.freeze({
   ga4Config: 'ga4_config',
   metaPixel: 'meta_pixel',
+  tiktokPixel: 'tiktok_pixel',
   conversionLinker: 'conversion_linker',
   googleAdsConversion: 'google_ads_conversion',
   ga4EventCoverage: 'ga4_event_coverage',
@@ -16,6 +17,7 @@ export const SIGNALS = Object.freeze({
 export const SIGNAL_ORDER = Object.freeze([
   'ga4_config',
   'meta_pixel',
+  'tiktok_pixel',
   'conversion_linker',
   'google_ads_conversion',
   'ga4_event_coverage',

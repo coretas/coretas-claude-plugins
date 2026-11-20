@@ -52,6 +52,22 @@
       "failure": null,
       "frameUrl": "https://never-fires.example.test/"
     }
+,
+    {
+      "tMs": 430,
+      "phase": "pre-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "analytics.tiktok.com",
+      "path": "/i18n/pixel/events.js",
+      "url": "https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=CTIKTOKPIXEL00000001&lib=ttq",
+      "params": { "sdkid": "CTIKTOKPIXEL00000001", "lib": "ttq" },
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://never-fires.example.test/"
+    }
   ],
   "dataLayer": [
     {

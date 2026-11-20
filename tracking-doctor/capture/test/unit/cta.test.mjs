@@ -40,6 +40,15 @@ describe('ctaContent', () => {
     assert.equal(ctaContent(findings), 'meta_pixel-mismatched')
   })
 
+  it('ranks tiktok_pixel after meta_pixel and before conversion_linker, as the backend declares it', () => {
+    const tiktokFirst = [
+      { signal: 'conversion_linker', status: 'missing' },
+      { signal: 'tiktok_pixel', status: 'missing' },
+    ]
+    assert.equal(ctaContent(tiktokFirst), 'tiktok_pixel-missing')
+    assert.equal(ctaContent([...tiktokFirst, { signal: 'meta_pixel', status: 'missing' }]), 'meta_pixel-missing')
+  })
+
   it('ranks the three non-ok statuses in this order, worst first', () => {
     assert.deepEqual(STATUS_SEVERITY, ['not_firing', 'mismatched', 'missing'])
   })

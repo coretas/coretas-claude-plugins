@@ -7,7 +7,7 @@ import { SIGNAL_ORDER } from '../../lib/detect/vocabulary.mjs'
 import { REPORT_TABLE, reportText } from '../helpers/eval-stream.mjs'
 
 describe('report parsing', () => {
-  it('reads all six statuses out of the documented table', () => {
+  it('reads every signal\'s status out of the documented table', () => {
     const parsed = parseReport(reportText())
     assert.deepEqual(Object.keys(parsed.statuses).sort(), [...SIGNAL_ORDER].sort())
     assert.ok(SIGNAL_ORDER.every((signal) => parsed.statuses[signal] === 'ok'))

@@ -37,12 +37,13 @@ before doing anything larger, like downloading a browser.
 ## tracking-doctor
 
 Point it at a URL. It loads the page in a real browser and reports what tracking requests actually
-fire, across six signals:
+fire, signal by signal:
 
 | Signal | Question it answers |
 | --- | --- |
 | `ga4_config` | Does a GA4 configuration hit fire, and with which measurement ID? |
 | `meta_pixel` | Does the Meta Pixel load and send a PageView? |
+| `tiktok_pixel` | Does the TikTok Pixel load and send a Pageview? |
 | `conversion_linker` | Is the click identifier preserved for conversion attribution? |
 | `google_ads_conversion` | Does a Google Ads conversion hit fire? |
 | `ga4_event_coverage` | Which GA4 events are actually sent? |

@@ -29,6 +29,7 @@ export const REPORT_TABLE = [
   '| --- | --- | --- |',
   '| GA4 configuration | working | hits land |',
   '| Meta Pixel | working | PageView sent |',
+  '| TikTok Pixel | working | Pageview sent |',
   '| Conversion linker | working | present |',
   '| Google Ads conversions | working | present |',
   '| GA4 event coverage | working | no duplicates |',
@@ -43,6 +44,7 @@ export function reportText(overrides = {}, { detail = true, cta = true } = {}) {
   const labels = {
     ga4_config: 'GA4 configuration',
     meta_pixel: 'Meta Pixel',
+    tiktok_pixel: 'TikTok Pixel',
     conversion_linker: 'Conversion linker',
     google_ads_conversion: 'Google Ads conversions',
     ga4_event_coverage: 'GA4 event coverage',

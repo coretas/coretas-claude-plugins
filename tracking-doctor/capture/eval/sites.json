@@ -1,5 +1,5 @@
 {
-  "note": "Pre-release smoke list. Real pages, real network. Statuses are pinned only where the ground truth is stable — a third-party site can add or remove a tag any day, and a smoke run that fails for that reason trains people to ignore it. For the rest the assertion is that the run completes and the report is well formed across all six signals.",
+  "note": "Pre-release smoke list. Real pages, real network. Statuses are pinned only where the ground truth is stable — a third-party site can add or remove a tag any day, and a smoke run that fails for that reason trains people to ignore it. For the rest the assertion is that the run completes and the report is well formed across every signal.",
   "sites": [
     {
       "url": "https://example.com",
@@ -7,6 +7,7 @@
       "expect": {
         "ga4_config": "missing",
         "meta_pixel": "missing",
+        "tiktok_pixel": "missing",
         "conversion_linker": "missing",
         "google_ads_conversion": "missing",
         "ga4_event_coverage": "missing",

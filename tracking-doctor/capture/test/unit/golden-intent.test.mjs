@@ -22,6 +22,7 @@ const INTENT = {
   'paused-tag': {
     ga4_config: 'not_firing',
     meta_pixel: 'not_firing',
+    tiktok_pixel: 'not_firing',
     conversion_linker: 'not_firing',
     google_ads_conversion: 'not_firing',
     ga4_event_coverage: 'missing',

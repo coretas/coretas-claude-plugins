@@ -98,6 +98,36 @@
       "frameUrl": "https://healthy.example.test/"
     },
     {
+      "tMs": 2210,
+      "phase": "post-consent",
+      "route": null,
+      "method": "GET",
+      "resourceType": "script",
+      "host": "analytics.tiktok.com",
+      "path": "/i18n/pixel/events.js",
+      "url": "https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=CTIKTOKPIXEL00000001&lib=ttq",
+      "params": { "sdkid": "CTIKTOKPIXEL00000001", "lib": "ttq" },
+      "body": null,
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    },
+    {
+      "tMs": 2250,
+      "phase": "post-consent",
+      "route": null,
+      "method": "POST",
+      "resourceType": "ping",
+      "host": "analytics.tiktok.com",
+      "path": "/api/v2/pixel",
+      "url": "https://analytics.tiktok.com/api/v2/pixel",
+      "params": {},
+      "body": { "kind": "json", "value": { "event": "Pageview", "context": { "pixel": { "code": "CTIKTOKPIXEL00000001" } } } },
+      "status": 200,
+      "failure": null,
+      "frameUrl": "https://healthy.example.test/"
+    },
+    {
       "tMs": 2300,
       "phase": "post-consent",
       "route": null,

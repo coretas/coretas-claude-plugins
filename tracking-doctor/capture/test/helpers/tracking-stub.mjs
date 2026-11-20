@@ -2,8 +2,8 @@
  * Offline stand-in for the real tracking endpoints.
  *
  * Golden fixtures have to use the genuine hosts and paths — `endpoints.mjs`
- * matches those exactly, so a fixture pointed at 127.0.0.1 detects as six
- * `missing` findings and proves nothing. Fulfilling the request inside the
+ * matches those exactly, so a fixture pointed at 127.0.0.1 detects as every
+ * signal `missing` and proves nothing. Fulfilling the request inside the
  * browser keeps the real host in the capture while never touching the network.
  *
  * Anything outside the fixture origin and this host list is aborted rather than
@@ -24,6 +24,7 @@ const TRACKING_HOSTS = Object.freeze([
   'googleads.g.doubleclick.net',
   'td.doubleclick.net',
   'www.google.com',
+  'analytics.tiktok.com',
 ])
 
 /** Endpoints that answer with no body at all; everything else gets the pixel. */

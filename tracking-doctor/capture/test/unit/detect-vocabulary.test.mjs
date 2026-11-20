@@ -7,6 +7,7 @@ test('SIGNAL_ORDER matches the shared vocabulary, in declaration order', () => {
   assert.deepEqual(SIGNAL_ORDER, [
     'ga4_config',
     'meta_pixel',
+    'tiktok_pixel',
     'conversion_linker',
     'google_ads_conversion',
     'ga4_event_coverage',
@@ -17,6 +18,7 @@ test('SIGNAL_ORDER matches the shared vocabulary, in declaration order', () => {
 test('SIGNALS values are byte-identical to the shared strings', () => {
   assert.equal(SIGNALS.ga4Config, 'ga4_config')
   assert.equal(SIGNALS.metaPixel, 'meta_pixel')
+  assert.equal(SIGNALS.tiktokPixel, 'tiktok_pixel')
   assert.equal(SIGNALS.conversionLinker, 'conversion_linker')
   assert.equal(SIGNALS.googleAdsConversion, 'google_ads_conversion')
   assert.equal(SIGNALS.ga4EventCoverage, 'ga4_event_coverage')

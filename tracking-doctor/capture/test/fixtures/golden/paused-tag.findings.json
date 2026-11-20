@@ -21,6 +21,7 @@
     {
       "detail": "The Meta Pixel library loaded but pixel (none declared) sent no events.",
       "observed_values": {
+        "declared_ids": [],
         "events": [],
         "failed_hit_count": 0,
         "hit_count": 0,
@@ -28,6 +29,22 @@
         "pixel_ids": []
       },
       "signal": "meta_pixel",
+      "status": "not_firing",
+      "tag_names": []
+    },
+    {
+      "detail": "The TikTok Pixel library loaded but pixel CTIKTOKPIXEL00000001 sent no events.",
+      "observed_values": {
+        "declared_ids": [
+          "CTIKTOKPIXEL00000001"
+        ],
+        "events": [],
+        "failed_hit_count": 0,
+        "hit_count": 0,
+        "loader_seen": true,
+        "pixel_ids": []
+      },
+      "signal": "tiktok_pixel",
       "status": "not_firing",
       "tag_names": []
     },

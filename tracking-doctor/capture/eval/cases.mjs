@@ -2,8 +2,8 @@
  * The audit layer reads the committed golden captures, never a live render. Two
  * reasons: the goldens' expected findings are already the diffed contract, and
  * the fixtures answer for real tracking hosts that only `tracking-stub.mjs`
- * fulfils — a model-driven render would either reach the network or observe six
- * `missing` signals and prove nothing.
+ * fulfils — a model-driven render would either reach the network or observe every
+ * signal `missing` and prove nothing.
  */
 import { STATUSES } from '../lib/detect/vocabulary.mjs'
 import { capturePath, findingsPath, goldenFixtureNames, readGolden } from '../test/helpers/golden.mjs'

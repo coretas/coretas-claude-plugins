@@ -25,7 +25,7 @@ const SKILL_PATH = join(
 )
 
 describe('eval labels', () => {
-  it('labels exactly the six signals', () => {
+  it('labels exactly the signals in SIGNAL_ORDER', () => {
     assert.deepEqual(Object.keys(SIGNAL_LABELS).sort(), [...SIGNAL_ORDER].sort())
   })
 

@@ -61,11 +61,12 @@ describe('audit cases', () => {
     assert.match(entry.prompt, /do not reach the network/i)
   })
 
-  it('splits the paused-tag fixture into four critical and two soft defects', async () => {
+  it('splits the paused-tag fixture into five critical and two soft defects', async () => {
     const entry = await caseFor('paused-tag')
     assert.deepEqual(entry.defects.critical, [
       'ga4_config',
       'meta_pixel',
+      'tiktok_pixel',
       'conversion_linker',
       'google_ads_conversion',
     ])

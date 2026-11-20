@@ -175,6 +175,24 @@
       "body": null,
       "failure": null,
       "frameUrl": "http://fixture.test/golden/wrong-ga4-id.html",
+      "host": "analytics.tiktok.com",
+      "method": "GET",
+      "params": {
+        "lib": "ttq",
+        "sdkid": "CTIKTOKPIXEL00000001"
+      },
+      "path": "/i18n/pixel/events.js",
+      "phase": "pre-consent",
+      "resourceType": "script",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=CTIKTOKPIXEL00000001&lib=ttq"
+    },
+    {
+      "body": null,
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/wrong-ga4-id.html",
       "host": "www.google-analytics.com",
       "method": "GET",
       "params": {
@@ -190,6 +208,31 @@
       "status": 204,
       "tMs": 0,
       "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-WRONG9999&gcs=G111&en=page_view"
+    },
+    {
+      "body": {
+        "kind": "json",
+        "value": {
+          "context": {
+            "pixel": {
+              "code": "CTIKTOKPIXEL00000001"
+            }
+          },
+          "event": "Pageview"
+        }
+      },
+      "failure": null,
+      "frameUrl": "http://fixture.test/golden/wrong-ga4-id.html",
+      "host": "analytics.tiktok.com",
+      "method": "POST",
+      "params": {},
+      "path": "/api/v2/pixel",
+      "phase": "pre-consent",
+      "resourceType": "ping",
+      "route": null,
+      "status": 200,
+      "tMs": 0,
+      "url": "https://analytics.tiktok.com/api/v2/pixel"
     },
     {
       "body": null,

@@ -66,6 +66,45 @@ export function metaHit({ id, ev, phase = 'post-consent', tMs = 1000, route = nu
   }
 }
 
+export function tiktokHit({ code, event, phase = 'post-consent', tMs = 1000, route = null, failure = null } = {}) {
+  const value = { ...(event ? { event } : {}), ...(code ? { context: { pixel: { code } } } : {}) }
+  return {
+    tMs,
+    phase,
+    route,
+    method: 'POST',
+    resourceType: 'ping',
+    host: 'analytics.tiktok.com',
+    path: '/api/v2/pixel',
+    url: 'https://analytics.tiktok.com/api/v2/pixel',
+    params: {},
+    body: { kind: 'json', value },
+    status: failure ? null : 200,
+    failure,
+    frameUrl: 'https://example.test/',
+  }
+}
+
+export function tiktokLoader({ sdkid, phase = 'pre-consent', tMs = 500, failure = null } = {}) {
+  const params = sdkid ? { sdkid, lib: 'ttq' } : {}
+  const query = new URLSearchParams(params).toString()
+  return {
+    tMs,
+    phase,
+    route: null,
+    method: 'GET',
+    resourceType: 'script',
+    host: 'analytics.tiktok.com',
+    path: '/i18n/pixel/events.js',
+    url: `https://analytics.tiktok.com/i18n/pixel/events.js${query ? `?${query}` : ''}`,
+    params,
+    body: null,
+    status: failure ? null : 200,
+    failure,
+    frameUrl: 'https://example.test/',
+  }
+}
+
 const ADS_HOST_PATH = {
   conversion: (id) => ({ host: 'www.googleadservices.com', path: `/pagead/conversion/${id}/` }),
   remarketing: (id) => ({ host: 'googleads.g.doubleclick.net', path: `/pagead/viewthroughconversion/${id}/` }),

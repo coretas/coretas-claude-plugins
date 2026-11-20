@@ -10,6 +10,7 @@ import { reportText } from '../helpers/eval-stream.mjs'
 const HEALTHY = {
   ga4_config: 'ok',
   meta_pixel: 'ok',
+  tiktok_pixel: 'ok',
   conversion_linker: 'ok',
   google_ads_conversion: 'ok',
   ga4_event_coverage: 'ok',
