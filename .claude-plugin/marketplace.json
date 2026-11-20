@@ -13,7 +13,7 @@
     {
       "name": "tracking-doctor",
       "source": "./tracking-doctor",
-      "description": "Audit what tracking actually fires on a web page — GA4, Meta Pixel, conversion linker, consent mode. No account, no OAuth.",
+      "description": "Audit what tracking actually fires on a web page — GA4, Meta and TikTok pixels, conversion linker, consent mode. No account, no OAuth.",
       "author": { "name": "Coretas", "email": "info@coretas.ai" },
       "homepage": "https://github.com/coretas/coretas-claude-plugins",
       "license": "MIT",

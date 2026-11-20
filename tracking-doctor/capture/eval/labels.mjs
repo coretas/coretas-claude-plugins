@@ -9,6 +9,7 @@ import { SIGNAL_ORDER, STATUSES } from '../lib/detect/vocabulary.mjs'
 export const SIGNAL_LABELS = Object.freeze({
   ga4_config: 'GA4 configuration',
   meta_pixel: 'Meta Pixel',
+  tiktok_pixel: 'TikTok Pixel',
   conversion_linker: 'Conversion linker',
   google_ads_conversion: 'Google Ads conversions',
   ga4_event_coverage: 'GA4 event coverage',

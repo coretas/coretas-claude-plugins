@@ -9,6 +9,8 @@ import {
   isGoogleTagManagerLoader,
   isMetaHit,
   isMetaLoader,
+  isTikTokHit,
+  isTikTokLoader,
   isUniversalAnalyticsHit,
   matchGoogleAdsHit,
   parseGcs,
@@ -19,6 +21,9 @@ test('ID_PATTERNS accept real IDs', () => {
   assert.ok(ID_PATTERNS.gtmContainer.test('GTM-ABC123'))
   assert.ok(ID_PATTERNS.adsConversion.test('AW-123456789'))
   assert.ok(ID_PATTERNS.metaPixel.test('1112223334445'))
+  assert.ok(ID_PATTERNS.tiktokPixel.test('C8PM4U59481U83L7JFP0'))
+  assert.ok(ID_PATTERNS.tiktokPixel.test('CAURORA0TIKTOK01'))
+  assert.ok(ID_PATTERNS.tiktokPixel.test('C'.repeat(24)))
 })
 
 test('ID_PATTERNS reject near-misses', () => {
@@ -28,6 +33,10 @@ test('ID_PATTERNS reject near-misses', () => {
   assert.ok(!ID_PATTERNS.adsConversion.test('AW-123'))
   assert.ok(!ID_PATTERNS.adsConversion.test('123456789'))
   assert.ok(!ID_PATTERNS.metaPixel.test('123'))
+  assert.ok(!ID_PATTERNS.tiktokPixel.test('c8pm4u59481u83l7jfp0'))
+  assert.ok(!ID_PATTERNS.tiktokPixel.test('C'.repeat(15)))
+  assert.ok(!ID_PATTERNS.tiktokPixel.test('C'.repeat(25)))
+  assert.ok(!ID_PATTERNS.tiktokPixel.test('C8PM4U59481U83L7JFP0&lib=ttq'))
 })
 
 test('/g/collect matches on a first-party host', () => {
@@ -55,6 +64,17 @@ test('Meta loader and hit host/path rows', () => {
     assert.ok(isMetaHit({ host, path: '/tr/' }))
   }
   assert.ok(!isMetaHit({ host: 'www.example.com', path: '/tr' }))
+})
+
+test('TikTok loader and hit host/path rows', () => {
+  assert.ok(isTikTokLoader({ host: 'analytics.tiktok.com', path: '/i18n/pixel/events.js' }))
+  assert.ok(!isTikTokLoader({ host: 'analytics.tiktok.com', path: '/i18n/pixel/config.js' }))
+  assert.ok(!isTikTokLoader({ host: 'cdn.example.com', path: '/i18n/pixel/events.js' }))
+  assert.ok(isTikTokHit({ host: 'analytics.tiktok.com', path: '/api/v2/pixel' }))
+  for (const path of ['/api/v2/pixel/act', '/api/v2/pixel/perf', '/api/v2/pixel/inter', '/api/v2/monitor']) {
+    assert.ok(!isTikTokHit({ host: 'analytics.tiktok.com', path }), `${path} is not an event hit`)
+  }
+  assert.ok(!isTikTokHit({ host: 'tiktok.example.com', path: '/api/v2/pixel' }))
 })
 
 test('each Google Ads host/path row is matched with the right kind', () => {

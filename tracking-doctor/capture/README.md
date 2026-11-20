@@ -72,7 +72,7 @@ all `conversion_linker` needs.
 
 ## Findings
 
-`detect` turns a capture into six findings, one per signal, in the same vocabulary Coretas's own
+`detect` turns a capture into one finding per signal, in the same vocabulary Coretas's own
 GTM container audit uses — so plugin output and a Coretas audit can be compared
 string-for-string.
 
@@ -91,8 +91,9 @@ node capture.mjs detect /tmp/tracking-doctor/artefact.json --out /tmp/tracking-d
 }
 ```
 
-The six signals, always present and always in this order: `ga4_config`, `meta_pixel`,
-`conversion_linker`, `google_ads_conversion`, `ga4_event_coverage`, `consent_mode`. Each finding's
+The signals, always present and always in this order: `ga4_config`, `meta_pixel`,
+`tiktok_pixel`, `conversion_linker`, `google_ads_conversion`, `ga4_event_coverage`,
+`consent_mode`. Each finding's
 `status` is one of `ok`, `missing`, `mismatched`, `not_firing` — `paused` is part of the shared
 vocabulary but describes a container-config state a rendered page cannot show, so this plugin never
 emits it. `tag_names` is always `[]`: the plugin observes the page, not the tag manager, so it has

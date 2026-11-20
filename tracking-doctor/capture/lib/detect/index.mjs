@@ -7,6 +7,7 @@ import { detectGa4Config } from './signals/ga4-config.mjs'
 import { detectGa4EventCoverage } from './signals/ga4-event-coverage.mjs'
 import { detectGoogleAdsConversion } from './signals/google-ads-conversion.mjs'
 import { detectMetaPixel } from './signals/meta-pixel.mjs'
+import { detectTikTokPixel } from './signals/tiktok-pixel.mjs'
 import { EMITTABLE_STATUSES, SIGNAL_ORDER } from './vocabulary.mjs'
 
 export class DetectionError extends Error {
@@ -28,6 +29,7 @@ export function detect(input) {
   const findings = [
     detectGa4Config(evidence),
     detectMetaPixel(evidence),
+    detectTikTokPixel(evidence),
     detectConversionLinker(evidence),
     detectGoogleAdsConversion(evidence),
     detectGa4EventCoverage(evidence),

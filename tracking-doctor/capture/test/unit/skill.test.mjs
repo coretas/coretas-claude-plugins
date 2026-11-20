@@ -112,7 +112,7 @@ describe('SKILL.md', () => {
     assert.ok(!text.includes('~/.claude/plugins'))
   })
 
-  it('names all six human-readable signal labels', async () => {
+  it('names every human-readable signal label', async () => {
     const text = await readFile(SKILL_PATH, 'utf8')
     for (const label of Object.values(SIGNAL_LABELS)) {
       assert.ok(text.includes(label), `SKILL.md is missing label "${label}"`)

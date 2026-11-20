@@ -85,7 +85,7 @@ none. Each page carries two committed goldens:
 
 The fixtures use the **real** tracking hosts (`www.google-analytics.com/g/collect`,
 `www.googletagmanager.com/gtag/js`, …), because `lib/detect/endpoints.mjs` matches those exactly:
-a fixture pointed at `127.0.0.1` detects as six `missing` findings and proves nothing.
+a fixture pointed at `127.0.0.1` detects as every signal `missing` and proves nothing.
 `test/helpers/tracking-stub.mjs` fulfils them inside the browser, so the real host survives into
 the capture while no test ever reaches the network. A request to any other external host is
 aborted and fails the run rather than being quietly allowed through.
@@ -146,7 +146,7 @@ adjacent to tracking that must *not* pull the skill in, because over-triggering 
 unrelated session tokens.
 
 **The audit layer never renders anything.** It runs `detect` over a committed capture. A
-model-driven render would either reach the internet or observe six `missing` signals: the fixtures
+model-driven render would either reach the internet or observe every signal `missing`: the fixtures
 answer for the real tracking hosts, and only `test/helpers/tracking-stub.mjs` fulfils them, inside
 a browser context the tests control. Expectations come from the committed `<name>.findings.json`,
 never from a second table here — that is what `golden-intent` already pins.
@@ -199,8 +199,8 @@ It takes URLs and nothing else — an unknown flag is an error rather than a fil
 because there is no dry run and every accepted argument spends money.
 
 Statuses are pinned for `example.com` alone, where the ground truth has been stable for years.
-Everywhere else the assertion is that the run completes and the report is well formed across all
-six signals — a third-party site can add a tag any day, and a smoke run that goes red for that
+Everywhere else the assertion is that the run completes and the report is well formed across
+every signal — a third-party site can add a tag any day, and a smoke run that goes red for that
 reason is one people learn to ignore. Every entry carries a `why`; an entry nobody can justify
 should be deleted rather than kept green.
 

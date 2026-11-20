@@ -7,6 +7,8 @@ import {
   isGoogleTagManagerLoader,
   isMetaHit,
   isMetaLoader,
+  isTikTokHit,
+  isTikTokLoader,
   matchGoogleAdsHit,
 } from './endpoints.mjs'
 
@@ -42,7 +44,7 @@ function toHit(request) {
   }
 }
 
-/** One pass over the capture producing the plain object the six rule modules read. */
+/** One pass over the capture producing the plain object the rule modules read. */
 export function collectEvidence(capture) {
   const requests = capture.requests ?? []
   const dataLayer = capture.dataLayer ?? []
@@ -50,6 +52,7 @@ export function collectEvidence(capture) {
 
   const ga4 = { hits: [], declaredIds: [], loaderUrls: [], observedIds: [], events: [] }
   const meta = { hits: [], loaderSeen: false, pixelIds: [], events: [] }
+  const tiktok = { hits: [], loaderSeen: false, declaredIds: [], pixelIds: [], events: [] }
   const ads = { hits: [], declaredIds: [], observedIds: [], labels: [], conversionHits: [], remarketingHits: [] }
   const google = { taggingPresent: false, hits: [] }
   const consent = { gcsValues: [], gcdValues: [], commands: [], phasesSeen: [] }
@@ -97,6 +100,21 @@ export function collectEvidence(capture) {
         if (id) meta.pixelIds.push(id)
         const ev = firstValue(params, 'ev')
         if (ev) meta.events.push(ev)
+      }
+    }
+
+    if (isTikTokLoader(request)) {
+      tiktok.loaderSeen = true
+      const sdkid = firstValue(request.params, 'sdkid')
+      if (sdkid && ID_PATTERNS.tiktokPixel.test(sdkid)) tiktok.declaredIds.push(sdkid)
+    }
+
+    if (isTikTokHit(request)) {
+      tiktok.hits.push(toHit(request))
+      if (!request.failure) {
+        const { code, event } = tiktokPayload(request)
+        if (code) tiktok.pixelIds.push(code)
+        if (event) tiktok.events.push(event)
       }
     }
 
@@ -155,8 +173,16 @@ export function collectEvidence(capture) {
     meta: {
       hits: meta.hits,
       loaderSeen: meta.loaderSeen,
+      declaredIds: [],
       pixelIds: sortedUnique(meta.pixelIds),
       events: sortedUnique(meta.events),
+    },
+    tiktok: {
+      hits: tiktok.hits,
+      loaderSeen: tiktok.loaderSeen,
+      declaredIds: sortedUnique(tiktok.declaredIds),
+      pixelIds: sortedUnique(tiktok.pixelIds),
+      events: sortedUnique(tiktok.events),
     },
     ads: {
       hits: ads.hits,
@@ -181,6 +207,17 @@ export function collectEvidence(capture) {
       params: sortedUnique(linker.params),
     },
     cookies: sortedUnique(cookies.map((cookie) => cookie.name)),
+  }
+}
+
+/** The beacon body is JSON: `event` at the top, the pixel code at `context.pixel.code`. */
+function tiktokPayload(request) {
+  const value = request.body?.kind === 'json' ? request.body.value : null
+  const code = value?.context?.pixel?.code
+  const event = value?.event
+  return {
+    code: typeof code === 'string' && code ? code : null,
+    event: typeof event === 'string' && event ? event : null,
   }
 }
 

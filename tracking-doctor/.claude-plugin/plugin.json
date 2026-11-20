@@ -1,7 +1,7 @@
 {
   "name": "tracking-doctor",
-  "description": "Audit what tracking actually fires on a web page — GA4, Meta Pixel, conversion linker, consent mode. No account, no OAuth.",
-  "version": "0.4.0",
+  "description": "Audit what tracking actually fires on a web page — GA4, Meta and TikTok pixels, conversion linker, consent mode. No account, no OAuth.",
+  "version": "0.5.0",
   "author": {
     "name": "Coretas",
     "email": "info@coretas.ai",

@@ -23,6 +23,7 @@
     {
       "detail": "Meta Pixel 1112223334445 sent PageView and 1 event(s) in total.",
       "observed_values": {
+        "declared_ids": [],
         "events": [
           "PageView"
         ],
@@ -34,6 +35,26 @@
         ]
       },
       "signal": "meta_pixel",
+      "status": "ok",
+      "tag_names": []
+    },
+    {
+      "detail": "TikTok Pixel CTIKTOKPIXEL00000001 sent Pageview and 1 event(s) in total.",
+      "observed_values": {
+        "declared_ids": [
+          "CTIKTOKPIXEL00000001"
+        ],
+        "events": [
+          "Pageview"
+        ],
+        "failed_hit_count": 0,
+        "hit_count": 1,
+        "loader_seen": true,
+        "pixel_ids": [
+          "CTIKTOKPIXEL00000001"
+        ]
+      },
+      "signal": "tiktok_pixel",
       "status": "ok",
       "tag_names": []
     },

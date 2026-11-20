@@ -23,6 +23,7 @@
     {
       "detail": "Meta Pixel 1112223334445 sent events (AddToCart) but no PageView.",
       "observed_values": {
+        "declared_ids": [],
         "events": [
           "AddToCart"
         ],
@@ -35,6 +36,26 @@
       },
       "signal": "meta_pixel",
       "status": "mismatched",
+      "tag_names": []
+    },
+    {
+      "detail": "TikTok Pixel CTIKTOKPIXEL00000001 sent Pageview and 1 event(s) in total.",
+      "observed_values": {
+        "declared_ids": [
+          "CTIKTOKPIXEL00000001"
+        ],
+        "events": [
+          "Pageview"
+        ],
+        "failed_hit_count": 0,
+        "hit_count": 1,
+        "loader_seen": true,
+        "pixel_ids": [
+          "CTIKTOKPIXEL00000001"
+        ]
+      },
+      "signal": "tiktok_pixel",
+      "status": "ok",
       "tag_names": []
     },
     {

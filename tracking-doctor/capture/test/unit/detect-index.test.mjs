@@ -10,9 +10,9 @@ import { FIXTURES } from '../helpers/paths.mjs'
 
 const readCapture = async (name) => JSON.parse(await readFile(join(FIXTURES, 'captures', `${name}.json`), 'utf8'))
 
-test('detect() always produces six findings in SIGNAL_ORDER', async () => {
+test('detect() always produces one finding per signal, in SIGNAL_ORDER', async () => {
   const findings = detect(await readCapture('healthy'))
-  assert.equal(findings.findings.length, 6)
+  assert.equal(findings.findings.length, SIGNAL_ORDER.length)
   assert.deepEqual(
     findings.findings.map((finding) => finding.signal),
     SIGNAL_ORDER
@@ -51,7 +51,7 @@ test('detect() is deterministic: the same input twice is byte-identical', async 
   assert.equal(stableStringify(detect(capture)), stableStringify(detect(capture)))
 })
 
-test('healthy.json: GA4, Meta, Ads, linker, event coverage and consent mode are all ok', async () => {
+test('healthy.json: GA4, Meta, TikTok, Ads, linker, event coverage and consent mode are all ok', async () => {
   const { findings } = detect(await readCapture('healthy'))
   assert.deepEqual(findings, [
     {
@@ -77,7 +77,22 @@ test('healthy.json: GA4, Meta, Ads, linker, event coverage and consent mode are 
       tag_names: [],
       observed_values: {
         pixel_ids: ['1112223334445'],
+        declared_ids: [],
         events: ['PageView'],
+        hit_count: 1,
+        failed_hit_count: 0,
+        loader_seen: true,
+      },
+    },
+    {
+      signal: 'tiktok_pixel',
+      status: 'ok',
+      detail: 'TikTok Pixel CTIKTOKPIXEL00000001 sent Pageview and 1 event(s) in total.',
+      tag_names: [],
+      observed_values: {
+        pixel_ids: ['CTIKTOKPIXEL00000001'],
+        declared_ids: ['CTIKTOKPIXEL00000001'],
+        events: ['Pageview'],
         hit_count: 1,
         failed_hit_count: 0,
         loader_seen: true,
@@ -138,7 +153,7 @@ test('present-never-fires.json: every loader present, nothing ever fires', async
   const { findings } = detect(await readCapture('present-never-fires'))
   assert.deepEqual(
     findings.map((finding) => finding.status),
-    ['not_firing', 'not_firing', 'not_firing', 'not_firing', 'missing', 'missing']
+    ['not_firing', 'not_firing', 'not_firing', 'not_firing', 'not_firing', 'missing', 'missing']
   )
   assert.deepEqual(findings, [
     {
@@ -162,7 +177,28 @@ test('present-never-fires.json: every loader present, nothing ever fires', async
       status: 'not_firing',
       detail: 'The Meta Pixel library loaded but pixel (none declared) sent no events.',
       tag_names: [],
-      observed_values: { pixel_ids: [], events: [], hit_count: 0, failed_hit_count: 0, loader_seen: true },
+      observed_values: {
+        pixel_ids: [],
+        declared_ids: [],
+        events: [],
+        hit_count: 0,
+        failed_hit_count: 0,
+        loader_seen: true,
+      },
+    },
+    {
+      signal: 'tiktok_pixel',
+      status: 'not_firing',
+      detail: 'The TikTok Pixel library loaded but pixel CTIKTOKPIXEL00000001 sent no events.',
+      tag_names: [],
+      observed_values: {
+        pixel_ids: [],
+        declared_ids: ['CTIKTOKPIXEL00000001'],
+        events: [],
+        hit_count: 0,
+        failed_hit_count: 0,
+        loader_seen: true,
+      },
     },
     {
       signal: 'conversion_linker',
@@ -207,7 +243,7 @@ test('no-tracking.json: a page with only its own assets is missing on every sign
   const { findings } = detect(await readCapture('no-tracking'))
   assert.deepEqual(
     findings.map((finding) => finding.status),
-    ['missing', 'missing', 'missing', 'missing', 'missing', 'missing']
+    ['missing', 'missing', 'missing', 'missing', 'missing', 'missing', 'missing']
   )
   assert.deepEqual(findings, [
     {
@@ -222,7 +258,28 @@ test('no-tracking.json: a page with only its own assets is missing on every sign
       status: 'missing',
       detail: 'No Meta Pixel observed on this page.',
       tag_names: [],
-      observed_values: { pixel_ids: [], events: [], hit_count: 0, failed_hit_count: 0, loader_seen: false },
+      observed_values: {
+        pixel_ids: [],
+        declared_ids: [],
+        events: [],
+        hit_count: 0,
+        failed_hit_count: 0,
+        loader_seen: false,
+      },
+    },
+    {
+      signal: 'tiktok_pixel',
+      status: 'missing',
+      detail: 'No TikTok Pixel observed on this page.',
+      tag_names: [],
+      observed_values: {
+        pixel_ids: [],
+        declared_ids: [],
+        events: [],
+        hit_count: 0,
+        failed_hit_count: 0,
+        loader_seen: false,
+      },
     },
     {
       signal: 'conversion_linker',

@@ -8,6 +8,7 @@ export const ID_PATTERNS = Object.freeze({
   gtmContainer: /^GTM-[A-Z0-9]{4,10}$/,
   adsConversion: /^AW-\d{9,12}$/,
   metaPixel: /^\d{13,17}$/,
+  tiktokPixel: /^[A-Z0-9]{16,24}$/,
 })
 
 const REGION_GA4_HOST = /^region\d+\.google-analytics\.com$/
@@ -47,6 +48,18 @@ const META_HIT_HOSTS = Object.freeze(['www.facebook.com', 'web.facebook.com', 'c
 
 export function isMetaHit(request) {
   return META_HIT_HOSTS.includes(request.host) && (request.path === '/tr' || request.path === '/tr/')
+}
+
+const TIKTOK_HOST = 'analytics.tiktok.com'
+
+/** The base code's loader; `sdkid` carries the pixel code and `lib` the `ttq` global's name. */
+export function isTikTokLoader(request) {
+  return request.host === TIKTOK_HOST && request.path === '/i18n/pixel/events.js'
+}
+
+/** Event beacons only: `/api/v2/pixel/act`, `/perf` and `/inter` are config and telemetry. */
+export function isTikTokHit(request) {
+  return request.host === TIKTOK_HOST && request.path === '/api/v2/pixel'
 }
 
 /**

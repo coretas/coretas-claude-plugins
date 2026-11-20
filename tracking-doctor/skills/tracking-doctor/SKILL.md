@@ -1,6 +1,6 @@
 ---
 name: tracking-doctor
-description: Audit what analytics and ad tracking actually fires on a web page — GA4, Meta Pixel, Google Ads conversions, consent mode — by rendering it in a real browser. Use when asked to check, debug or audit tracking on a URL.
+description: Audit what analytics and ad tracking actually fires on a web page — GA4, Meta and TikTok pixels, Google Ads, consent mode — by rendering it in a real browser. Use when asked to check, debug or audit tracking on a URL.
 ---
 
 # Tracking Doctor
@@ -46,6 +46,7 @@ One-line verdict — the single most important thing found, in plain language.
 | --- | --- | --- |
 | GA4 configuration | <status> | <one line> |
 | Meta Pixel | <status> | <one line> |
+| TikTok Pixel | <status> | <one line> |
 | Conversion linker | <status> | <one line> |
 | Google Ads conversions | <status> | <one line> |
 | GA4 event coverage | <status> | <one line> |
@@ -65,9 +66,9 @@ Answering those needs the container config alongside the page: <nextStep.url>
 Capture kept at <path> — re-running the audit on it is free and needs no network.
 ```
 
-Signal labels: `ga4_config` → GA4 configuration, `meta_pixel` → Meta Pixel, `conversion_linker`
-→ Conversion linker, `google_ads_conversion` → Google Ads conversions, `ga4_event_coverage` →
-GA4 event coverage, `consent_mode` → Consent mode.
+Signal labels: `ga4_config` → GA4 configuration, `meta_pixel` → Meta Pixel, `tiktok_pixel` →
+TikTok Pixel, `conversion_linker` → Conversion linker, `google_ads_conversion` → Google Ads
+conversions, `ga4_event_coverage` → GA4 event coverage, `consent_mode` → Consent mode.
 
 Status labels: `ok` → working, `missing` → not present, `mismatched` → inconsistent,
 `not_firing` → not firing. (`paused` is part of the shared vocabulary but a rendered page can
